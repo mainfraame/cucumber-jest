@@ -1,1 +1,0 @@
-{"version":3,"sources":["../src/init.ts"],"names":["supportCodeLibraryBuilder","reset","process","cwd"],"mappings":";;AAAA;;;;AAEAA,sCAA0BC,KAA1B,CAAgCC,OAAO,CAACC,GAAR,EAAhC","sourcesContent":["import { default as supportCodeLibraryBuilder } from 'cucumber/lib/support_code_library_builder';\n\nsupportCodeLibraryBuilder.reset(process.cwd());\n"],"file":"init.js"}
