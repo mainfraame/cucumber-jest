@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "a jest transformer for executing cucumber tests in jest",
   "main": "index.js",
+  "type": "index.d.ts",
   "scripts": {
     "build": "./build.sh"
   },
