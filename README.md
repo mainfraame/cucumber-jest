@@ -82,10 +82,8 @@ You'll need to add the following to your jest config:
     "ts",
     "tsx"
   ],
-  "setupFiles": [
-    
-  ],
   "setupFilesAfterEnv": [
+    "<rootDir>/node_modules/cucumber-jest/dist/init.js", // <--- *2
     "<rootDir>/test/world.ts",
     "<rootDir>/test/hooks.tsx",
     "<rootDir>/test/steps.ts"
