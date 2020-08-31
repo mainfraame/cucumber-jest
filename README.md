@@ -103,7 +103,7 @@ You'll need to add the following to your jest config:
 ```
 
 1. Add ```feature``` to *moduleFileExtensions*
-2. Add ```"<rootDir>/node_modules/cucumber-jest/dist/utils/init.js"``` to *setupFilesAfterEnv*
+2. Add ```"<rootDir>/node_modules/cucumber-jest/dist/init.js"``` to *setupFilesAfterEnv*
    - this file calls cucumber's *supportCodeLibraryBuilder.reset* which sets up cucumber to start capturing registered hooks / steps
    - it's important to note that this file must be list first in the *setupFilesAfterEnv* list of files; before your world, hooks, or step files
 3. Add ```"^.+\\.(feature)$": "jest-cucumber"``` as a *transformer*
