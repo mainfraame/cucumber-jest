@@ -1,0 +1,46 @@
+{
+  "name": "cucumber-jest",
+  "version": "0.0.1",
+  "description": "a jest transformer for executing cucumber tests in jest",
+  "main": "index.js",
+  "scripts": {
+    "build": "./build.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mentierd/cucumber-jest.git"
+  },
+  "keywords": [
+    "jest",
+    "cucumber",
+    "transformer",
+    "gherkin"
+  ],
+  "author": "dayne mentier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mentierd/cucumber-jest/issues"
+  },
+  "homepage": "https://github.com/mentierd/cucumber-jest#readme",
+  "dependencies": {
+    "@cucumber/gherkin": "11.0.0",
+    "babel-preset-jest": ">=26.0.0",
+    "cucumber": ">=6.0.0",
+    "fast-glob": "^3.2.4",
+    "jest": ">=26.0.1",
+    "react-dom": ">=16.9.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.4",
+    "@babel/plugin-transform-typescript": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/cucumber": "^6.0.1",
+    "@types/jest": "^26.0.10",
+    "@types/node": "^14.6.2",
+    "@types/qs": "^6.9.2",
+    "@types/react-dom": "^16.9.8",
+    "typescript": "^3.9.7"
+  }
+}
