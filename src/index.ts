@@ -2,6 +2,7 @@ import { transform } from '@babel/core';
 import jestPreset from 'babel-preset-jest';
 import crypto from 'crypto';
 import type { Config } from '@jest/types';
+import path from 'path';
 
 export default {
     canInstrument: false,
@@ -21,8 +22,10 @@ export default {
     ),
     process(src: string, filePath: Config.Path, jestConfig: Config.ProjectConfig) {
 
+        const pathToParser = path.resolve(jestConfig.cwd, './node_modules/jest-cucumber/dist/utils/parseFeature.js');
+
         const testFile = `
-            import execTest from 'jest-cucumber/dist/utils/parseFeature.js';
+            import execTest from '${pathToParser}';
             
             execTest('${jestConfig.cwd}', '${filePath}', ${JSON.stringify(jestConfig.moduleFileExtensions)})
         `;
