@@ -8,7 +8,8 @@ module.exports = {
             {
                 isTSX: true
             }
-        ]
+        ],
+        'babel-plugin-add-module-exports'
     ],
     presets: [
         [
@@ -16,7 +17,8 @@ module.exports = {
             {
                 targets: {
                     node: 'current'
-                }
+                },
+                modules: 'cjs'
             }
         ],
         '@babel/preset-typescript'
