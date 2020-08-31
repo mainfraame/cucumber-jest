@@ -34,6 +34,10 @@ function parseFeature(cwd: string, featurePath: string, extensions: string[]) {
         }
     ).stdout;
 
+    if (!varMapPaths) {
+        return featurePath;
+    }
+
     const varMapLocation = JSON.parse(varMapPaths)[0];
 
     // load the var map file
