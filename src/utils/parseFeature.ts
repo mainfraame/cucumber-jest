@@ -165,7 +165,7 @@ function bindGherkinSteps(steps, definitions) {
         }
 
         const tableDescription = step.dataTable ?
-            '\n' + stepArgs[0].rawTable.reduce((acc, row) => ([
+            '\n' + stepArgs[stepArgs.length - 1].rawTable.reduce((acc, row) => ([
                 ...acc,
                 row.join(' | ')
             ]), []).join('\n') : '';
