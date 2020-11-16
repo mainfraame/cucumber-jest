@@ -283,8 +283,8 @@ A few things to note for this functionality is:
 
 1. the file must contain the same name as the feature file you're looking to populate
 2. all variables start with a "$"; eg, in the feature file, the variable would be defined as *$email*, while the vars file would contain *email*
-3. you can further split up your vars files by using the *CUCUMBER_ENV* variable. Using that, your files would look like this:
-```featureFileName.CUCUMBER_ENV.vars.{js,ts,json}```
+3. you can further split up your vars files by using the *ENV* variable (extension can be .json, .js, .ts). Using that, your files would look like this (assuming ENV = "dev"):
+```featureFileName.dev.vars.ts```
    
-For an example, see the example [scenarioOutline](https://github.com/mentierd/pekel/tree/master/examples/basic/features/scenarioOutline.feature) feature file, 
-and the accompanying [variable file](https://github.com/mentierd/pekel/tree/master/examples/basic/features/scenarioOutline.vars.ts)
+For an example, see the example [scenarioOutline](https://github.com/mentierd/pekel/blob/master/examples/basic/test/features/scenarioOutline.feature) feature file, 
+and the accompanying [variable file](https://github.com/mentierd/pekel/tree/master/examples/basic/test/features/scenarioOutline.vars.ts)
