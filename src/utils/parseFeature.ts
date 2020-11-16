@@ -324,7 +324,7 @@ export default function execTest(cwd: string, featurePath: string, moduleFileExt
             }
 
             for (let i = 0; i < suite.steps.when.length; i++) {
-                it(suite.steps.when[i].keyword + suite.steps.when[i].text, async () => {
+                it(suite.steps.when[i].description, async () => {
                     await suite.steps.when[i].code.apply(world, suite.steps.when[i].stepArgs);
                 });
             }
