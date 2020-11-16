@@ -24,7 +24,7 @@ function parseFeature(cwd: string, featurePath: string, extensions: string[]) {
     const varMapPaths = spawnSync(
         'node',
         [
-            path.resolve(process.cwd(), './node_modules/cucumber-jest/dist/getPaths.js'),
+            path.resolve(__dirname, './getPaths.js'),
             cwd,
             varMapFileName,
             JSON.stringify(varMapExts)
