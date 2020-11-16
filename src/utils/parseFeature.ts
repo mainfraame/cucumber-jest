@@ -164,12 +164,21 @@ function bindGherkinSteps(steps, definitions) {
             acc.last = type;
         }
 
+        const tableDescription = step.dataTable ?
+            '\n' + stepArgs[0].rawTable.reduce((acc, row) => ([
+                ...acc,
+                row.join(' | ')
+            ]), []).join('\n') : '';
+
+        const docStringDescription = step.docString ?
+            '\n' + step.docString.content : '';
+
         return {
             ...acc,
             [acc.last]: [
                 ...acc[acc.last] || [],
                 {
-                    description: `${step.keyword}${step.text}`,
+                    description: `${step.keyword}${step.text}${tableDescription}${docStringDescription}`,
                     ...step,
                     code: definition.code,
                     stepArgs
