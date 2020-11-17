@@ -9,5 +9,12 @@ export default function getMocks(cwd: string) {
         {encoding: 'utf-8'}
     ).stdout;
 
-    return JSON.parse(mocks);
+    return JSON.parse(mocks)
+        .filter((mock) => !mock.includes('node_modules'))
+        .map((mock) => mock.replace(process.cwd(), ''))
+        .map((mock) => (
+            mock.startsWith('/__mocks__/') ?
+                path.dirname(mock.replace('/__mocks__/', '')) :
+                mock
+        ));
 }
