@@ -6,6 +6,7 @@ import { default as supportCodeLibraryBuilder } from 'cucumber/lib/support_code_
 import { interopRequireDefault } from 'jest-util';
 import fs from 'fs';
 import path from 'path';
+import getMocks from './getMocks';
 
 supportCodeLibraryBuilder.finalize();
 
@@ -252,11 +253,23 @@ function parseGherkinSuites(cwd, feature: string, extensions: string[], cucumber
     };
 }
 
-export default function execTest(cwd: string, featurePath: string, moduleFileExtensions: string[]) {
+export default function execTest(cwd: string, featurePath: string, moduleFileExtensions: string[], restoreMocks: boolean | string, keepMocks?: string[]) {
 
     const act = typeof global['window'] === 'undefined' ?
         async (fn) => await fn() :
         require('react-dom/test-utils').act;
+
+    // if projectConfig.restoreMocks, get all the __mock__ based mocks and remove them
+    if (typeof restoreMocks === 'string' ? restoreMocks === 'true' : restoreMocks) {
+        getMocks(cwd)
+            .filter((file) => (
+                !keepMocks.length ||
+                !keepMocks.includes(file)
+            ))
+            .forEach((file) => {
+                jest.unmock(file);
+            });
+    }
 
     // parse the feature file with given cucumber steps / hooks
     // generating a jasmine-like structure

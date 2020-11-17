@@ -21,10 +21,20 @@ export default {
     ),
     process(src: string, filePath: Config.Path, jestConfig: Config.ProjectConfig) {
 
+        const extensions = JSON.stringify(jestConfig.moduleFileExtensions);
+
+        const restoreMocks = (!!jestConfig.restoreMocks).toString();
+
+        const keepMocks = JSON.stringify(
+            process.env.KEEP_MOCKS ?
+                JSON.parse(process.env.KEEP_MOCKS) :
+                []
+        );
+
         const testFile = `
             import execTest from 'cucumber-jest/dist/utils/parseFeature';
             
-            execTest('${jestConfig.cwd}', '${filePath}', ${JSON.stringify(jestConfig.moduleFileExtensions)})
+            execTest('${jestConfig.cwd}', '${filePath}', ${extensions}, ${restoreMocks}, ${keepMocks})
         `;
 
         const featureFile = transform(testFile, {

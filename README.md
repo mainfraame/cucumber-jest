@@ -276,6 +276,13 @@ Ran all test suites.
 
 ## Additional Features
 
+### Restore Mocks
+
+To automatically unmock files that use the ```__mocks__``` technique, simply add ```restoreMocks
+to your jest configuration.
+
+If you want to pass a list of mock files to keep, set the environment variable ```KEEP_MOCKS``` with a stringified array of paths.
+
 ### Gherkin Variables
 
 This provides the ability to define variables in your feature files, and hold the values in a [separate file](https://github.com/mentierd/pekel/tree/master/examples/basic/features/scenarioOutline.vars.ts).
