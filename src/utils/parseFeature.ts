@@ -169,10 +169,10 @@ function bindGherkinSteps(steps, definitions) {
             '\n' + stepArgs[stepArgs.length - 1].rawTable.reduce((acc, row) => ([
                 ...acc,
                 row.join(' | ')
-            ]), []).join('\n') : '';
+            ]), []).join('\n\t\t') : '';
 
         const docStringDescription = step.docString ?
-            '\n' + step.docString.content : '';
+            '\n\t\t' + step.docString.content : '';
 
         return {
             ...acc,
