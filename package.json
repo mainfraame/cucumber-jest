@@ -1,6 +1,6 @@
 {
   "name": "cucumber-jest",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "a jest transformer for executing cucumber tests in jest",
   "main": "dist/index.js",
   "type": "dist/index.d.ts",
@@ -44,6 +44,7 @@
     "@types/qs": "^6.9.2",
     "@types/react-dom": "^16.9.8",
     "babel-plugin-add-module-exports": "^1.0.4",
+    "chalk": "^4.1.0",
     "typescript": "^4.1.2"
   }
 }

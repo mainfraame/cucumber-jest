@@ -1,4 +1,5 @@
 import AsciiTable from 'ascii-table';
+import chalk from 'chalk';
 import generateMessages from '@cucumber/gherkin/dist/src/stream/generateMessages';
 import { uuid } from '@cucumber/messages/dist/src/IdGenerator';
 import { spawnSync } from 'child_process';
@@ -11,6 +12,8 @@ import getMocks from './getMocks';
 
 supportCodeLibraryBuilder.finalize();
 
+const space = '      ';
+
 function createDataTable(rows) {
     const table = new AsciiTable();
 
@@ -21,7 +24,7 @@ function createDataTable(rows) {
     }
 
     return table.toString().split('\n').map((row) => (
-        '    ' + row
+        space + row
     )).join('\n');
 }
 
@@ -162,14 +165,16 @@ function bindGherkinSteps(steps, definitions) {
 
         const multiSteps = definitions.filter((def) => {
             return def.matchesStepName(step.text);
-        }).length > 1;
+        });
 
         if (!definition) {
-            throw new Error(`Could not find a step with pattern that matches the text:\n\n${step.text}`);
+            throw new Error(`\n${chalk.red('Error:')}\nCould not find a step with pattern that matches the text:\n${chalk.yellow(step.text)}\n`);
         }
 
-        if (multiSteps && process.env.DEBUG) {
-            process.stdout.write(`Warning! multiple steps found for the text\n\n${step.text}`);
+        if (multiSteps.length > 1 && process.env.DEBUG) {
+            process.stdout.write(`${chalk.yellow('Warning:')}\nmultiple steps found\nstep:${chalk.yellow(step.text)}\npatterns:\n${multiSteps.map((step) => (
+                `- ${step.pattern.toString()}`
+            )).join('\n')}\n`);
         }
 
         const args = definition.pattern ?
@@ -198,7 +203,7 @@ function bindGherkinSteps(steps, definitions) {
 
         const docStringDescription = step.docString ?
             '\n' + step.docString.content.split('\n').map((row) => (
-                '    ' + `${row}`
+                space + `${row}`
             )).join('\n') : '';
 
         return {
