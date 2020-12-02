@@ -1,3 +1,4 @@
+import AsciiTable from 'ascii-table';
 import generateMessages from '@cucumber/gherkin/dist/src/stream/generateMessages';
 import { uuid } from '@cucumber/messages/dist/src/IdGenerator';
 import { spawnSync } from 'child_process';
@@ -9,6 +10,20 @@ import path from 'path';
 import getMocks from './getMocks';
 
 supportCodeLibraryBuilder.finalize();
+
+function createDataTable(rows) {
+    const table = new AsciiTable();
+
+    table.setHeading(...rows[0]);
+
+    for (let i = 1; i < rows.length; i++) {
+        table.addRow(...rows[i]);
+    }
+
+    return table.toString().split('\n').map((row) => (
+        '    ' + row
+    )).join('\n');
+}
 
 function parseFeature(cwd: string, featurePath: string, extensions: string[]) {
 
@@ -145,6 +160,18 @@ function bindGherkinSteps(steps, definitions) {
             return def.matchesStepName(step.text);
         });
 
+        const multiSteps = definitions.filter((def) => {
+            return def.matchesStepName(step.text);
+        }).length > 1;
+
+        if (!definition?.pattern) {
+            throw new Error(`Could not find a step with pattern that matches the text:\n\n${step.text}`);
+        }
+
+        if (multiSteps && process.env.DEBUG) {
+            process.stdout.write(`Warning! multiple steps found for the text\n\n${step.text}`);
+        }
+
         const args = definition.pattern ?
             Array.from(definition.pattern.exec(step.text)).slice(1) :
             [];
@@ -166,14 +193,12 @@ function bindGherkinSteps(steps, definitions) {
         }
 
         const tableDescription = step.dataTable ?
-            '\n' + stepArgs[stepArgs.length - 1].rawTable.reduce((acc, row) => ([
-                ...acc,
-                `\t${row.join(' | ')}`
-            ]), []).join('\n') : '';
+            '\n' + createDataTable(stepArgs[stepArgs.length - 1].rawTable)
+            : '';
 
         const docStringDescription = step.docString ?
-            '\n' + step.docString.content.split('\n').map((row)=>(
-                `\t${row}`
+            '\n' + step.docString.content.split('\n').map((row) => (
+                '    ' + `${row}`
             )).join('\n') : '';
 
         return {
