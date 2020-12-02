@@ -164,7 +164,7 @@ function bindGherkinSteps(steps, definitions) {
             return def.matchesStepName(step.text);
         }).length > 1;
 
-        if (!definition?.pattern) {
+        if (!definition) {
             throw new Error(`Could not find a step with pattern that matches the text:\n\n${step.text}`);
         }
 
