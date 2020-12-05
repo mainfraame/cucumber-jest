@@ -198,10 +198,6 @@ AfterAll(async function (this: TestWorld) {
 });
 ```
 
-You can choose to use the hooks to render/unmount your component before/after each feature file like above,
-or you can add a path to your application entry point to your jest configuration's [setupFiles](https://jestjs.io/docs/en/configuration#setupfiles-array) property. 
-The latter is more performant.
-    
 ### Steps
 
 ```path/to/your/steps.ts```
