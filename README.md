@@ -522,9 +522,7 @@ way you would access a value from an object in javascript.
 
 ### Variable File Rules
 
-1 - must be located within your project
-
-2 - uses an extension defined in your jest configuration: [**moduleFileExtensions**](https://jestjs.io/docs/en/configuration#modulefileextensions-arraystring)
-
-2 - can be parsed into a javascript object, eg. .js, .json, .ts
+ - must be located within your project
+ - uses an extension defined in your jest configuration: [**moduleFileExtensions**](https://jestjs.io/docs/en/configuration#modulefileextensions-arraystring)
+ - can be parsed into a javascript object, eg. .js, .json, .ts
 
