@@ -4,6 +4,7 @@
   "description": "a basic example of using cucumber-jest",
   "scripts": {
     "test": "ENV=dev jest --verbose --logHeapUsage",
+    "test:example": "ENV=dev jest test/features/scenario.feature --verbose --logHeapUsage",
     "test:leaks": "ENV=dev jest --verbose --detectLeaks --detectOpenHandles --logHeapUsage",
     "test:debug": "jest --runInBand --logHeapUsage"
   },
@@ -35,7 +36,7 @@
     "@types/react": "^16.9.32",
     "@types/react-dom": "^16.9.6",
     "babel-plugin-lodash": "^3.3.4",
-    "cucumber-jest": "0.0.21",
+    "cucumber-jest": "0.0.22",
     "deep-clean": "^1.0.2",
     "jest-date-mock": "^1.0.8",
     "msw": "^0.24.1",

@@ -317,126 +317,13 @@ Feature: Sign Up
 
 Below is an example output from running tests against the [example project](example)
 ```text
- PASS  test/features/scenarioOutlineNested.feature (145 MB heap size)
-  Feature: Sign Up - Scenario Outline [Nested] - Submitting With Extra Emails
-    ✓ Given the firstName text input value is James (10 ms)
-    ✓ And the lastName text input value is Dean (9 ms)
-    ✓ And the email text input value is james.dean@gmail.com (10 ms)
-    ✓ And the password text input value is itsASecretShh... (8 ms)
-    ✓ And the extraEmails checkbox input is not checked (1 ms)
-    ✓ When the submit button is clicked (90 ms)
-    ✓ Then POST /api/sign-up is called with the request body:
-       {
-           "firstName": "James",
-           "lastName": "Dean",
-           "email": "james.dean@gmail.com",
-           "password": "itsASecretShh...",
-           "extraEmails": false,
-           "date": "2019-12-01T15:00:00.000Z"
-       } (3 ms)
-    ✓ And the successAlert is visible (2 ms)
-    ✓ And the showExtraEmailsAlert is not visible (3 ms)
-  Feature: Sign Up - Scenario Outline [Nested] - Submitting Without Extra Emails
-    ✓ Given the firstName text input value is James (10 ms)
-    ✓ And the lastName text input value is Dean (8 ms)
-    ✓ And the email text input value is james.dean@gmail.com (8 ms)
-    ✓ And the password text input value is itsASecretShh... (9 ms)
-    ✓ And the extraEmails checkbox input is checked (8 ms)
-    ✓ When the submit button is clicked (40 ms)
-    ✓ Then POST /api/sign-up is called with the request body:
-       {
-           "firstName": "James",
-           "lastName": "Dean",
-           "email": "james.dean@gmail.com",
-           "password": "itsASecretShh...",
-           "extraEmails": true,
-           "date": "2019-12-01T15:00:00.000Z"
-       }
-    ✓ And the successAlert is visible (2 ms)
-    ✓ And the showExtraEmailsAlert is visible (1 ms)
-
- PASS  test/features/scenarioBackground.feature (128 MB heap size)
+ PASS  test/features/scenario.feature (113 MB heap size)
   Feature: Sign Up - Without Extra Emails
-    ✓ Given the firstName text input value is James (5 ms)
+    ✓ Given the firstName text input value is James (13 ms)
     ✓ And the lastName text input value is Dean (8 ms)
     ✓ And the email text input value is james.dean@gmail.com (9 ms)
-    ✓ And the password text input value is itsASecretShh... (9 ms)
-    ✓ When the submit button is clicked (50 ms)
-    ✓ Then POST /api/sign-up is called with the request body:
-       {
-           "firstName": "James",
-           "lastName": "Dean",
-           "email": "james.dean@gmail.com",
-           "password": "itsASecretShh...",
-           "extraEmails": false,
-           "date": "2019-12-01T15:00:00.000Z"
-       } (1 ms)
-    ✓ And the successAlert is visible (5 ms)
-    ✓ And the showExtraEmailsAlert is not visible (2 ms)
-  Feature: Sign Up - With Extra Emails
-    ✓ Given the firstName text input value is James (9 ms)
-    ✓ And the lastName text input value is Dean (10 ms)
-    ✓ And the email text input value is james.dean@gmail.com (7 ms)
-    ✓ And the password text input value is itsASecretShh... (8 ms)
-    ✓ And the extraEmails checkbox input is checked (6 ms)
-    ✓ When the submit button is clicked (36 ms)
-    ✓ Then POST /api/sign-up is called with the request body:
-       {
-           "firstName": "James",
-           "lastName": "Dean",
-           "email": "james.dean@gmail.com",
-           "password": "itsASecretShh...",
-           "extraEmails": true,
-           "date": "2019-12-01T15:00:00.000Z"
-       }
-    ✓ And the successAlert is visible (2 ms)
-    ✓ And the showExtraEmailsAlert is visible (1 ms)
-
- PASS  test/features/scenarioOutline.feature (133 MB heap size)
-  Feature: Sign Up - Submitting With Extra Emails
-    ✓ Given the firstName text input value is James (5 ms)
-    ✓ And the lastName text input value is Dean (7 ms)
-    ✓ And the email text input value is james.dean@gmail.com (8 ms)
-    ✓ And the password text input value is itsASecretShh... (10 ms)
-    ✓ And the extraEmails checkbox input is not checked (1 ms)
-    ✓ When the submit button is clicked (53 ms)
-    ✓ Then POST /api/sign-up is called with the request body:
-       {
-           "firstName": "James",
-           "lastName": "Dean",
-           "email": "james.dean@gmail.com",
-           "password": "itsASecretShh...",
-           "extraEmails": false,
-           "date": "2019-12-01T15:00:00.000Z"
-       } (1 ms)
-    ✓ And the successAlert is visible (1 ms)
-    ✓ And the showExtraEmailsAlert is not visible (2 ms)
-  Feature: Sign Up - Submitting Without Extra Emails
-    ✓ Given the firstName text input value is James (9 ms)
-    ✓ And the lastName text input value is Dean (9 ms)
-    ✓ And the email text input value is james.dean@gmail.com (6 ms)
     ✓ And the password text input value is itsASecretShh... (7 ms)
-    ✓ And the extraEmails checkbox input is checked (7 ms)
-    ✓ When the submit button is clicked (40 ms)
-    ✓ Then POST /api/sign-up is called with the request body:
-       {
-           "firstName": "James",
-           "lastName": "Dean",
-           "email": "james.dean@gmail.com",
-           "password": "itsASecretShh...",
-           "extraEmails": true,
-           "date": "2019-12-01T15:00:00.000Z"
-       } (1 ms)
-    ✓ And the successAlert is visible (1 ms)
-    ✓ And the showExtraEmailsAlert is visible (1 ms)
-
- PASS  test/features/scenario.feature (139 MB heap size)
-  Feature: Sign Up - Without Extra Emails
-    ✓ Given the firstName text input value is James (4 ms)
-    ✓ And the lastName text input value is Dean (8 ms)
-    ✓ And the email text input value is james.dean@gmail.com (8 ms)
-    ✓ And the password text input value is itsASecretShh... (9 ms)
-    ✓ When the submit button is clicked (48 ms)
+    ✓ When the submit button is clicked (83 ms)
     ✓ Then POST /api/sign-up is called with the request body:
        {
            "firstName": "James",
@@ -445,16 +332,16 @@ Below is an example output from running tests against the [example project](exam
            "password": "itsASecretShh...",
            "extraEmails": false,
            "date": "2019-12-01T15:00:00.000Z"
-       }
+       } (2 ms)
     ✓ And the successAlert is visible (2 ms)
     ✓ And the showExtraEmailsAlert is not visible (2 ms)
   Feature: Sign Up - With Extra Emails
     ✓ Given the firstName text input value is James (8 ms)
     ✓ And the lastName text input value is Dean (8 ms)
-    ✓ And the email text input value is james.dean@gmail.com (7 ms)
-    ✓ And the password text input value is itsASecretShh... (8 ms)
-    ✓ And the extraEmails checkbox input is checked (5 ms)
-    ✓ When the submit button is clicked (35 ms)
+    ✓ And the email text input value is james.dean@gmail.com (8 ms)
+    ✓ And the password text input value is itsASecretShh... (7 ms)
+    ✓ And the extraEmails checkbox input is checked (7 ms)
+    ✓ When the submit button is clicked (42 ms)
     ✓ Then POST /api/sign-up is called with the request body:
        {
            "firstName": "James",
@@ -465,15 +352,13 @@ Below is an example output from running tests against the [example project](exam
            "date": "2019-12-01T15:00:00.000Z"
        } (1 ms)
     ✓ And the successAlert is visible (1 ms)
-    ✓ And the showExtraEmailsAlert is visible (2 ms)
+    ✓ And the showExtraEmailsAlert is visible
 
-Test Suites: 4 passed, 4 total
-Tests:       70 passed, 70 total
+Test Suites: 1 passed, 1 total
+Tests:       17 passed, 17 total
 Snapshots:   0 total
-Time:        10.142 s, estimated 24 s
-Ran all test suites.
+Time:        5.066 s
 ```
-
 
 ## Gherkin Variables
 
