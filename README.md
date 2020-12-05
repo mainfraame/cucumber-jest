@@ -18,10 +18,11 @@ npm i cucumber-jest -D
     - [Jest Config](#jest-config)
         
     - [Example](#example)   
-        - [Feature](#feature)
+
+        - [World](#world)
         - [Hooks](#hooks)
         - [Steps](#steps)
-        - [World](#world)
+        - [Feature](#feature)
 
 - [Gherkin Variables \[new\]](#gherkin-variables)
    
@@ -63,7 +64,6 @@ npm i cucumber-jest -D
 
 You'll need to add the following to your jest config:
 
-### moduleFileExtensions:
 ```json
 {
   "moduleFileExtensions": [
@@ -75,9 +75,9 @@ You'll need to add the following to your jest config:
   ],
   "setupFilesAfterEnv": [
     "<rootDir>/node_modules/cucumber-jest/dist/init.js", // <--- *2
-    "<rootDir>/test/world.ts",
-    "<rootDir>/test/hooks.tsx",
-    "<rootDir>/test/steps.ts"
+    "<rootDir>/path/to/your/world.ts",
+    "<rootDir>/path/to/your/hooks.tsx",
+    "<rootDir>/path/to/your/steps.ts"
   ],
   "transform": {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
@@ -85,10 +85,7 @@ You'll need to add the following to your jest config:
   },
   "testMatch": [
     "<rootDir>/path/to/your/*.feature" // <--- *4
-  ],
-  "testTimeout": 60000,
-  "testURL": "http://127.0.0.1/",
-  "verbose": true
+  ]
 }
 
 ```
@@ -102,47 +99,102 @@ You'll need to add the following to your jest config:
 
 ## Example
 
-For a full featured example, please see the [example project](example)
+The examples below shows parts of the [example project](example).
 
-### Feature
 
-```path/to/your/features/button.feature```
+### World
 
-```feature
-Feature: Button
+[setWorldConstuctor](example/test/world.ts) allows you to set the context of "this" for your steps/hooks definitions.
+Unlike cucumber.js, *"this"* is accessible inside of beforeAll and AfterAll hooks.
 
-Given I go to home
-When I click the login button
-Then the login button is not visible
+This can be helpful when you want to maintain state, access *globals*, or assign component testing classes.
+The values are accessible within all Hooks
+
+```path/to/your/world.ts```
+
+```typescript
+import { setWorldConstructor } from 'cucumber';
+
+import Element from './element';
+import { $server, $spy } from './mocks';
+
+/**
+ *  $server is a reference to the mock-service-worker's (mws) setupServer
+ * 
+ *  $spy is a jest.fn() (mock) that is called inside of the msw mocks
+ *
+ *  Element class is a helper provided in the example project
+ *  
+ *  for more details, please see the example project
+ */
+
+export class TestWorld {
+    $server = $server;
+    $spy = $spy;
+
+    email = new Element({name: 'email'});
+    extraEmails = new Element({name: 'extraEmails'});
+    firstName = new Element({name: 'firstName'});
+    lastName = new Element({name: 'lastName'});
+    password = new Element({name: 'password'});
+    reset = new Element({dataId: 'reset'});
+    submit = new Element({dataId: 'submit'});
+    successAlert = new Element({dataId: 'successAlert'});
+    showExtraEmailsAlert = new Element({dataId: 'showExtraEmailsAlert'});
+}
+
+setWorldConstructor(
+    TestWorld
+);
 ```
 
 ### Hooks
 
-```path/to/your/hooks.tsx```
-
 ```typescript
+import { After, AfterAll, BeforeAll } from 'cucumber';
+import { advanceTo, clear } from 'jest-date-mock';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { act } from 'react-dom/test-utils'
-import { AfterAll, BeforeAll } from 'cucumber';
+import { act } from 'react-dom/test-utils';
 
-import SignUp from './path/to/your/app';
+import { SignUp } from '../src/signUp';
+import { TestWorld } from './world';
 
-BeforeAll(async function () {
-    await act(async () => {
+const $root = document.createElement('div');
+
+document.body.appendChild($root);
+
+BeforeAll(async function (this: TestWorld) {
+
+    this.$server.listen();
+
+    advanceTo(new Date('2019-12-01T15:00:00.000Z'));
+
+    act(() => {
         ReactDOM.render(
             <SignUp/>,
-            document.body
-        )
+            $root
+        );
     });
 });
 
-AfterAll(async function () {
-    await act(async () => {
-        ReactDOM.unmountComponentAtNode(
-            document.body
-        )
+After(function (this: TestWorld) {
+    
+    this.$spy.mockClear();
+    
+    this.$server.resetHandlers();
+});
+
+AfterAll(async function (this: TestWorld) {
+    clear();
+
+    act(() => {
+        ReactDOM.unmountComponentAtNode($root);
     });
+
+    this.$server.close();
+    
+    $root.remove();
 });
 ```
 
@@ -155,41 +207,110 @@ The latter is more performant.
 ```path/to/your/steps.ts```
 
 ```typescript
-import { Given, When, Then } from 'cucumber';
-import { act } from 'react-dom/test-utils';
+import { Given, Then, When } from 'cucumber';
 
-Given(/I go to (.*)$/, function(link) {
-    window.location.hash = `#/${link}`;
+import './world';
+import { TestWorld } from './world';
+
+Given(/^the (\S+) component rendered$/, async function (this: TestWorld, name) {
+   
+    await this[name].click();
 });
 
-When(/I click the (\S+) button$/, async function(name) {
-    await act(async () => {
-        document.querySelector(`[data-test-id="${name}"]`).click();
-    });
+When(/^the (\S+) button is clicked$/, async function (this: TestWorld, name) {
+
+    await this[name].click();
+
+    await this[name].waitForEnabled();
 });
 
-Then(/the (\S+) button is (visible|not visible)$/, function(name, state) {
-    expect(!!document.querySelector(`[data-test-id="${name}"]`))
-        .toEqual(state === 'visible')
+When(/^the (\S+) text input value is (.*)$/, async function (this: TestWorld, name, value) {
+    
+    await this[name].setValue(value);
+});
+
+When(/^the (\S+) checkbox input is (checked|not checked)$/, async function (this: TestWorld, name, state) {
+
+    const currentValue = this[name].getAttribute('checked');
+
+    if (currentValue !== (state === 'checked')) {
+
+        await this[name].click();
+    }
+});
+
+Then(/^(GET|PUT|POST|DELETE) (.*) is called with the (request body|params):$/,
+    function (this: TestWorld, method, url, type, value) {
+
+        const hasBody = type === 'request body';
+
+        expect(this.$spy).toHaveBeenCalledWith({
+            url,
+            method,
+            ...hasBody ? {data: value} : {params: value}
+        });
+    }
+);
+
+Then(/^the (\S+) is (visible|not visible)$/, async function (this: TestWorld, name, state) {
+
+    await this[name][state === 'visible' ? 'waitForInDom' : 'waitForNotInDom']();
+
+    expect(this[name].isInDom()).toEqual(state === 'visible');
+});
+
+Then(/^the (\S+) inner text is "(.*)"$/, function (this: TestWorld, name, innerText) {
+
+    expect(this[name].innerText()).toEqual(innerText);
 });
 ```
 
-### World
 
-[setWorldConstuctor](example/test/world.ts) allows you to set the context of "this" for your steps/hooks definitions. 
-This can be helpful when you want to maintain state between steps/hooks or want your steps/hooks to have access 
-to some predefined data. The values are accessible within all Hooks, and Steps by using *this*
+### Feature
 
-```path/to/your/world.ts```
+```feature
+Feature: Sign Up
 
-```typescript
-import { setWorldConstructor } from 'cucumber';
+  Scenario: Without Extra Emails
+    Given the firstName text input value is James
+    And the lastName text input value is Dean
+    And the email text input value is james.dean@gmail.com
+    And the password text input value is itsASecretShh...
+    When the submit button is clicked
+    Then POST /api/sign-up is called with the request body:
+      """
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": false,
+           "date": "2019-12-01T15:00:00.000Z"
+       }
+      """
+    And the successAlert is visible
+    And the showExtraEmailsAlert is not visible
 
-setWorldConstructor(
-    class MyWorld {
-        pages = [];
-    }
-);
+  Scenario: With Extra Emails
+    Given the firstName text input value is James
+    And the lastName text input value is Dean
+    And the email text input value is james.dean@gmail.com
+    And the password text input value is itsASecretShh...
+    And the extraEmails checkbox input is checked
+    When the submit button is clicked
+    Then POST /api/sign-up is called with the request body:
+      """
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": true,
+           "date": "2019-12-01T15:00:00.000Z"
+       }
+      """
+    And the successAlert is visible
+    And the showExtraEmailsAlert is visible
 ```
 
 ### Output

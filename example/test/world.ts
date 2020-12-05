@@ -12,8 +12,6 @@ jest.mock('follow-redirects', () => ({
     }
 }));
 
-jest.setTimeout(1000000);
-
 export class TestWorld {
     $server = $server;
     $spy = $spy;

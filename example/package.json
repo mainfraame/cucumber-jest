@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "a basic example of using cucumber-jest",
   "scripts": {
-    "test": "ENV=dev jest --verbose --detectLeaks --detectOpenHandles --logHeapUsage",
+    "test": "ENV=dev jest --verbose --logHeapUsage",
+    "test:leaks": "ENV=dev jest --verbose --detectLeaks --detectOpenHandles --logHeapUsage",
     "test:debug": "jest --runInBand --logHeapUsage"
   },
   "author": "dayne mentier",
