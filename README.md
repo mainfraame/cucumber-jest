@@ -22,9 +22,8 @@ npm i cucumber-jest -D
         - [Hooks](#hooks)
         - [Steps](#steps)
         - [World](#world)
-        
-    - [Additional Features](#additional-features)   
-        - [Gherkin Variables](#gherkin-variables)
+
+- [Gherkin Variables \[new\]](#gherkin-variables)
    
 ## Gherkin Features
 
@@ -57,14 +56,6 @@ npm i cucumber-jest -D
 |                    | [Tags](https://github.com/cucumber/cucumber-js/blob/master/docs/cli.md#tags)                                                                                      | need to identify a way to pass tags through jest                           |
 | :white_check_mark: | [Then](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#thenpattern-options-fn)                                            |                                                                            |
 | :white_check_mark: | [When](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#whenpattern-options-fn)                                            |                                                                            |
-
-
-## Additional Features
-
-| Supported          | Feature                                                                                                                                                           | Notes                                                                      | 
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| :white_check_mark: | [gherkin variables](#gherkin-variables) used to populate feature files                                                                                                     |                                                                            |
-
 
 ## Getting Started
 
@@ -110,6 +101,8 @@ You'll need to add the following to your jest config:
 4. Add ```"<rootDir>/path/to/your/*.feature"``` as a *testMatch* pattern
 
 ## Example
+
+For a full featured example, please see the [example project](example)
 
 ### Feature
 
@@ -183,7 +176,7 @@ Then(/the (\S+) button is (visible|not visible)$/, function(name, state) {
 
 ### World
 
-[setWorldConstuctor](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/world.md) allows you to set the context of "this" for your steps/hooks definitions. 
+[setWorldConstuctor](example/test/world.ts) allows you to set the context of "this" for your steps/hooks definitions. 
 This can be helpful when you want to maintain state between steps/hooks or want your steps/hooks to have access 
 to some predefined data. The values are accessible within all Hooks, and Steps by using *this*
 
@@ -201,97 +194,331 @@ setWorldConstructor(
 
 ### Output
 
-Below is an example output from running tests against the [example](https://github.com/mentierd/pekel/tree/master/examples/basic/test)
+Below is an example output from running tests against the [example project](example)
 ```text
- PASS  test/features/scenarioOutline.feature (97 MB heap size)
-  Feature: Sign Up - Submitting With Extra Emails
-    ✓ Given the firstName text input value is Dayne (37 ms)
-    ✓ And the lastName text input value is Mentier (11 ms)
-    ✓ And the email text input value is dayne.mentier@gmail.com (13 ms)
-    ✓ And the password text input value is itsASecretShh... (9 ms)
-    ✓ And the extraEmails checkbox input is not checked (2 ms)
-    ✓ When the submit button is clicked (89 ms)
-    ✓ Then POST http://127.0.0.1:8080/api/sign-up is called with the request body: (3 ms)
+ PASS  test/features/scenarioOutlineNested.feature (145 MB heap size)
+  Feature: Sign Up - Scenario Outline [Nested] - Submitting With Extra Emails
+    ✓ Given the firstName text input value is James (10 ms)
+    ✓ And the lastName text input value is Dean (9 ms)
+    ✓ And the email text input value is james.dean@gmail.com (10 ms)
+    ✓ And the password text input value is itsASecretShh... (8 ms)
+    ✓ And the extraEmails checkbox input is not checked (1 ms)
+    ✓ When the submit button is clicked (90 ms)
+    ✓ Then POST /api/sign-up is called with the request body:
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": false,
+           "date": "2019-12-01T15:00:00.000Z"
+       } (3 ms)
     ✓ And the successAlert is visible (2 ms)
+    ✓ And the showExtraEmailsAlert is not visible (3 ms)
+  Feature: Sign Up - Scenario Outline [Nested] - Submitting Without Extra Emails
+    ✓ Given the firstName text input value is James (10 ms)
+    ✓ And the lastName text input value is Dean (8 ms)
+    ✓ And the email text input value is james.dean@gmail.com (8 ms)
+    ✓ And the password text input value is itsASecretShh... (9 ms)
+    ✓ And the extraEmails checkbox input is checked (8 ms)
+    ✓ When the submit button is clicked (40 ms)
+    ✓ Then POST /api/sign-up is called with the request body:
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": true,
+           "date": "2019-12-01T15:00:00.000Z"
+       }
+    ✓ And the successAlert is visible (2 ms)
+    ✓ And the showExtraEmailsAlert is visible (1 ms)
+
+ PASS  test/features/scenarioBackground.feature (128 MB heap size)
+  Feature: Sign Up - Without Extra Emails
+    ✓ Given the firstName text input value is James (5 ms)
+    ✓ And the lastName text input value is Dean (8 ms)
+    ✓ And the email text input value is james.dean@gmail.com (9 ms)
+    ✓ And the password text input value is itsASecretShh... (9 ms)
+    ✓ When the submit button is clicked (50 ms)
+    ✓ Then POST /api/sign-up is called with the request body:
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": false,
+           "date": "2019-12-01T15:00:00.000Z"
+       } (1 ms)
+    ✓ And the successAlert is visible (5 ms)
+    ✓ And the showExtraEmailsAlert is not visible (2 ms)
+  Feature: Sign Up - With Extra Emails
+    ✓ Given the firstName text input value is James (9 ms)
+    ✓ And the lastName text input value is Dean (10 ms)
+    ✓ And the email text input value is james.dean@gmail.com (7 ms)
+    ✓ And the password text input value is itsASecretShh... (8 ms)
+    ✓ And the extraEmails checkbox input is checked (6 ms)
+    ✓ When the submit button is clicked (36 ms)
+    ✓ Then POST /api/sign-up is called with the request body:
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": true,
+           "date": "2019-12-01T15:00:00.000Z"
+       }
+    ✓ And the successAlert is visible (2 ms)
+    ✓ And the showExtraEmailsAlert is visible (1 ms)
+
+ PASS  test/features/scenarioOutline.feature (133 MB heap size)
+  Feature: Sign Up - Submitting With Extra Emails
+    ✓ Given the firstName text input value is James (5 ms)
+    ✓ And the lastName text input value is Dean (7 ms)
+    ✓ And the email text input value is james.dean@gmail.com (8 ms)
+    ✓ And the password text input value is itsASecretShh... (10 ms)
+    ✓ And the extraEmails checkbox input is not checked (1 ms)
+    ✓ When the submit button is clicked (53 ms)
+    ✓ Then POST /api/sign-up is called with the request body:
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": false,
+           "date": "2019-12-01T15:00:00.000Z"
+       } (1 ms)
+    ✓ And the successAlert is visible (1 ms)
     ✓ And the showExtraEmailsAlert is not visible (2 ms)
   Feature: Sign Up - Submitting Without Extra Emails
-    ✓ Given the firstName text input value is Dayne (12 ms)
-    ✓ And the lastName text input value is Mentier (11 ms)
-    ✓ And the email text input value is dayne.mentier@gmail.com (8 ms)
-    ✓ And the password text input value is itsASecretShh... (10 ms)
-    ✓ And the extraEmails checkbox input is checked (9 ms)
-    ✓ When the submit button is clicked (45 ms)
-    ✓ Then POST http://127.0.0.1:8080/api/sign-up is called with the request body: (1 ms)
+    ✓ Given the firstName text input value is James (9 ms)
+    ✓ And the lastName text input value is Dean (9 ms)
+    ✓ And the email text input value is james.dean@gmail.com (6 ms)
+    ✓ And the password text input value is itsASecretShh... (7 ms)
+    ✓ And the extraEmails checkbox input is checked (7 ms)
+    ✓ When the submit button is clicked (40 ms)
+    ✓ Then POST /api/sign-up is called with the request body:
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": true,
+           "date": "2019-12-01T15:00:00.000Z"
+       } (1 ms)
     ✓ And the successAlert is visible (1 ms)
     ✓ And the showExtraEmailsAlert is visible (1 ms)
 
- PASS  test/features/scenario.feature (93 MB heap size)
+ PASS  test/features/scenario.feature (139 MB heap size)
   Feature: Sign Up - Without Extra Emails
-    ✓ Given the firstName text input value is Dayne (11 ms)
-    ✓ And the lastName text input value is Mentier (12 ms)
-    ✓ And the email text input value is dayne.mentier@gmail.com (11 ms)
-    ✓ And the password text input value is itsASecretShh... (14 ms)
-    ✓ When the submit button is clicked (66 ms)
-    ✓ Then POST http://127.0.0.1:8080/api/sign-up is called with the request body: (5 ms)
-    ✓ And the successAlert is visible (2 ms)
-    ✓ And the showExtraEmailsAlert is not visible (2 ms)
-  Feature: Sign Up - With Extra Emails
-    ✓ Given the firstName text input value is Dayne (14 ms)
-    ✓ And the lastName text input value is Mentier (12 ms)
-    ✓ And the email text input value is dayne.mentier@gmail.com (12 ms)
+    ✓ Given the firstName text input value is James (4 ms)
+    ✓ And the lastName text input value is Dean (8 ms)
+    ✓ And the email text input value is james.dean@gmail.com (8 ms)
     ✓ And the password text input value is itsASecretShh... (9 ms)
-    ✓ And the extraEmails checkbox input is checked (9 ms)
-    ✓ When the submit button is clicked (49 ms)
-    ✓ Then POST http://127.0.0.1:8080/api/sign-up is called with the request body: (1 ms)
+    ✓ When the submit button is clicked (48 ms)
+    ✓ Then POST /api/sign-up is called with the request body:
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": false,
+           "date": "2019-12-01T15:00:00.000Z"
+       }
     ✓ And the successAlert is visible (2 ms)
-    ✓ And the showExtraEmailsAlert is visible (1 ms)
-
- PASS  test/features/scenarioBackground.feature (85 MB heap size)
-  Feature: Sign Up - Without Extra Emails
-    ✓ Given the firstName text input value is Dayne (14 ms)
-    ✓ And the lastName text input value is Mentier (13 ms)
-    ✓ And the email text input value is dayne.mentier@gmail.com (15 ms)
-    ✓ And the password text input value is itsASecretShh... (22 ms)
-    ✓ When the submit button is clicked (66 ms)
-    ✓ Then POST http://127.0.0.1:8080/api/sign-up is called with the request body: (3 ms)
-    ✓ And the successAlert is visible (4 ms)
     ✓ And the showExtraEmailsAlert is not visible (2 ms)
   Feature: Sign Up - With Extra Emails
-    ✓ Given the firstName text input value is Dayne (10 ms)
-    ✓ And the lastName text input value is Mentier (8 ms)
-    ✓ And the email text input value is dayne.mentier@gmail.com (10 ms)
+    ✓ Given the firstName text input value is James (8 ms)
+    ✓ And the lastName text input value is Dean (8 ms)
+    ✓ And the email text input value is james.dean@gmail.com (7 ms)
     ✓ And the password text input value is itsASecretShh... (8 ms)
-    ✓ And the extraEmails checkbox input is checked (7 ms)
-    ✓ When the submit button is clicked (46 ms)
-    ✓ Then POST http://127.0.0.1:8080/api/sign-up is called with the request body:
-    ✓ And the successAlert is visible (2 ms)
-    ✓ And the showExtraEmailsAlert is visible (1 ms)
+    ✓ And the extraEmails checkbox input is checked (5 ms)
+    ✓ When the submit button is clicked (35 ms)
+    ✓ Then POST /api/sign-up is called with the request body:
+       {
+           "firstName": "James",
+           "lastName": "Dean",
+           "email": "james.dean@gmail.com",
+           "password": "itsASecretShh...",
+           "extraEmails": true,
+           "date": "2019-12-01T15:00:00.000Z"
+       } (1 ms)
+    ✓ And the successAlert is visible (1 ms)
+    ✓ And the showExtraEmailsAlert is visible (2 ms)
 
-Test Suites: 3 passed, 3 total
-Tests:       52 passed, 52 total
+Test Suites: 4 passed, 4 total
+Tests:       70 passed, 70 total
 Snapshots:   0 total
-Time:        7.603 s
+Time:        10.142 s, estimated 24 s
 Ran all test suites.
 ```
 
-## Additional Features
 
-### Restore Mocks
+## Gherkin Variables
 
-To automatically unmock files that use the ```__mocks__``` technique, simply add ```restoreMocks
-to your jest configuration.
+An additional feature of this library is **gherkin variables**. This feature allows you
+to define data that you want to inject into the feature file before parsing it and executing the test.
 
-If you want to pass a list of mock files to keep, set the environment variable ```KEEP_MOCKS``` with a stringified array of paths.
+### Use Without ENV
 
-### Gherkin Variables
+You can use this feature by setting up a file where the name matches the feature file you
+want to use it with, and include **.vars** in the name, eg.
 
-This provides the ability to define variables in your feature files, and hold the values in a [separate file](https://github.com/mentierd/pekel/tree/master/examples/basic/features/scenarioOutline.vars.ts).
-A few things to note for this functionality is:
+| Feature File            | Variable File               |  
+| ----------------------- | --------------------------- | 
+| scenarioOutline.feature | scenarioOutline.**vars**.js     |
+| scenarioOutline.feature | scenarioOutline.**vars**.json   |
+| scenarioOutline.feature | scenarioOutline.**vars**.ts     |
 
-1. the file must contain the same name as the feature file you're looking to populate
-2. all variables start with a "$"; eg, in the feature file, the variable would be defined as *$email*, while the vars file would contain *email*
-3. you can further split up your vars files by using the *ENV* variable (extension can be .json, .js, .ts). Using that, your files would look like this (assuming ENV = "dev"):
-```featureFileName.dev.vars.ts```
-   
-For an example, see the example [scenarioOutline](https://github.com/mentierd/pekel/blob/master/examples/basic/test/features/scenarioOutline.feature) feature file, 
-and the accompanying [variable file](https://github.com/mentierd/pekel/tree/master/examples/basic/test/features/scenarioOutline.vars.ts)
+### Use With ENV
+Alternatively, if you want to define multiple variable files for different environments,
+you can set the **ENV** environment variable and include the value of **ENV** as part of the filename.
+
+The table below contains multiple examples with different ENV values and extensions eg:
+
+| Environment Variable    | Feature File            | Variable File                      |  
+| ----------------------- | ----------------------- | ---------------------------------- | 
+| ENV=**dev**             | scenarioOutline.feature | scenarioOutline.**dev**.vars.js    |
+| ENV=**dev**             | scenarioOutline.feature | scenarioOutline.**dev**.vars.json  |
+| ENV=**dev**             | scenarioOutline.feature | scenarioOutline.**dev**.vars.ts    |
+| ENV=**qa**              | scenarioOutline.feature | scenarioOutline.**qa**.vars.js     |
+| ENV=**qa**              | scenarioOutline.feature | scenarioOutline.**qa**.vars.json   |
+| ENV=**qa**              | scenarioOutline.feature | scenarioOutline.**qa**.vars.ts     |
+| ENV=**cert**            | scenarioOutline.feature | scenarioOutline.**cert**.vars.js   |
+| ENV=**cert**            | scenarioOutline.feature | scenarioOutline.**cert**.vars.json |
+| ENV=**cert**            | scenarioOutline.feature | scenarioOutline.**cert**.vars.ts   |
+
+### Example Variable Use
+
+The properties in your variable files can be used in your feature file by prefixing the json path with **$**, eg.
+
+| Property Name In Feature File | Property Name In Variable File |
+| ----------------------------- | ------------------------------ |
+| $firstName                    | firstName                      |
+
+** nested structures are also supported, please see examples below.
+
+### Example With ENV & Flat Variables Structure
+
+Testing Command:
+```bash
+ENV=dev $(npm bin)/jest
+```
+
+Variables File:
+```typescript
+// scenarioOutline.dev.vars.ts
+
+export default {
+    email: 'james.dean@gmail.com',
+    firstName: 'James',
+    lastName: 'Dean',
+    password: 'itsASecretShh...'
+};
+```
+
+Feature File:
+```gherkin
+# scenarioOutline.feature
+  
+Feature: Sign Up
+
+  Scenario Outline: Submitting <prefix> Extra Emails
+    Given the firstName text input value is $firstName
+    And the lastName text input value is $lastName
+    And the email text input value is $email
+    And the password text input value is $password
+    And the extraEmails checkbox input is <extraEmails>
+    When the submit button is clicked
+    Then POST /api/sign-up is called with the request body:
+      """
+       {
+           "firstName": "$firstName",
+           "lastName": "$lastName",
+           "email": "$email",
+           "password": "$password",
+           "extraEmails": <extraEmailsValue>,
+           "date": "2019-12-01T15:00:00.000Z"
+       }
+      """
+    And the successAlert is <successAlert>
+    And the showExtraEmailsAlert is <showExtraEmailsAlert>
+
+    Examples:
+      | prefix  | extraEmails | extraEmailsValue | successAlert | showExtraEmailsAlert |
+      | With    | not checked | false            | visible      | not visible          |
+      | Without | checked     | true             | visible      | visible              |
+```
+
+### Example With ENV & Nested Variables Structure
+
+Testing Command:
+```bash
+ENV=qa $(npm bin)/jest
+```
+
+Variables File:
+```typescript
+// scenarioOutline.qa.vars.ts
+
+export default {
+    user: {
+        email: 'james.dean@gmail.com',
+        firstName: 'James',
+        lastName: 'Dean',
+        password: 'itsASecretShh...'
+    }
+};
+```
+
+Feature File:
+```gherkin
+# scenarioOutline.feature
+
+Feature: Sign Up - Scenario Outline [Nested]
+
+  Scenario Outline: Submitting <prefix> Extra Emails
+    Given the firstName text input value is $user.firstName
+    And the lastName text input value is $user.lastName
+    And the email text input value is $user.email
+    And the password text input value is $user.password
+    And the extraEmails checkbox input is <extraEmails>
+    When the submit button is clicked
+    Then POST /api/sign-up is called with the request body:
+      """
+       {
+           "firstName": "$user.firstName",
+           "lastName": "$user.lastName",
+           "email": "$user.email",
+           "password": "$user.password",
+           "extraEmails": <extraEmailsValue>,
+           "date": "2019-12-01T15:00:00.000Z"
+       }
+      """
+    And the successAlert is <successAlert>
+    And the showExtraEmailsAlert is <showExtraEmailsAlert>
+
+    Examples:
+      | prefix  | extraEmails | extraEmailsValue | successAlert | showExtraEmailsAlert |
+      | With    | not checked | false            | visible      | not visible          |
+      | Without | checked     | true             | visible      | visible              |
+```
+
+** it's important to note that for nested structures you are using the path to access them, the same
+way you would access a value from an object in javascript.
+
+### Examples
+| Type                         | Feature File                                                                 | Variable File                                                                                  |
+| ---------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Variables **Without** Env    | [scenarioOutline](example/test/features/scenarioOutline.feature)             | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts)                      |
+| Variables **With Env** (dev) | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature) | [scenarioOutlineNested.dev.vars.ts](example/test/variables/scenarioOutlineNested.dev.vars.ts)  |
+
+
+### Variable File Rules
+
+1 - must be located within your project
+
+2 - uses an extension defined in your jest configuration: [**moduleFileExtensions**](https://jestjs.io/docs/en/configuration#modulefileextensions-arraystring)
+
+2 - can be parsed into a javascript object, eg. .js, .json, .ts
+

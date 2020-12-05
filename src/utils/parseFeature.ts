@@ -5,6 +5,8 @@ import { uuid } from '@cucumber/messages/dist/src/IdGenerator';
 import { spawnSync } from 'child_process';
 import DataTable from 'cucumber/lib/models/data_table';
 import { default as supportCodeLibraryBuilder } from 'cucumber/lib/support_code_library_builder';
+import escapeStringRegexp from 'escape-string-regexp';
+import { flattenObject } from 'flatten-anything'
 import { interopRequireDefault } from 'jest-util';
 import fs from 'fs';
 import path from 'path';
@@ -34,40 +36,66 @@ function parseFeature(cwd: string, featurePath: string, extensions: string[]) {
 
     const varMapExts = extensions.filter((ext) => ext !== 'feature');
 
-    const varMapFileName = process.env.CUCUMBER_ENV ?
-        `**/${path.basename(featurePath, path.extname(featurePath))}.${process.env.CUCUMBER_ENV}.vars` :
-        `**/${path.basename(featurePath, path.extname(featurePath))}.vars`;
+    const fileExtension = path.extname(featurePath);
+    const isJSON = fileExtension === 'json';
 
+    const varMapPathsForEnv = JSON.parse(
+        spawnSync(
+            'node',
+            [
+                path.resolve(__dirname, './getPaths.js'),
+                cwd,
+                `**/${path.basename(featurePath, fileExtension)}.${process.env.ENV}.vars`,
+                JSON.stringify(varMapExts)
+            ],
+            {
+                encoding: 'utf-8'
+            }
+        ).stdout
+    );
     // scan relative directories to find any file that matches the feature file name,
     // but as another extension
-    const varMapPaths = spawnSync(
-        'node',
-        [
-            path.resolve(__dirname, './getPaths.js'),
-            cwd,
-            varMapFileName,
-            JSON.stringify(varMapExts)
-        ],
-        {
-            encoding: 'utf-8'
-        }
-    ).stdout;
+    const varMapPaths = JSON.parse(
+        spawnSync(
+            'node',
+            [
+                path.resolve(__dirname, './getPaths.js'),
+                cwd,
+                `**/${path.basename(featurePath, fileExtension)}.vars`,
+                JSON.stringify(varMapExts)
+            ],
+            {
+                encoding: 'utf-8'
+            }
+        ).stdout
+    );
 
-    if (!varMapPaths) {
+    if (!varMapPaths.length && !varMapPathsForEnv.length) {
         return featurePath;
     }
 
-    const varMapLocation = JSON.parse(varMapPaths)[0];
+    const varMapLocation = (
+        varMapPaths.length ?
+            varMapPaths :
+            varMapPathsForEnv
+    ).filter((path) => !path.includes('node_modules'))[0];
 
-    // load the var map file
+    // load the variable file; use default if it's not a json file
     const varMapFile = varMapLocation ?
-        interopRequireDefault(require(varMapLocation)).default as { [name: string]: string | boolean | Date | number } :
+        (isJSON ?
+                interopRequireDefault(require(varMapLocation)) :
+                interopRequireDefault(require(varMapLocation)).default
+        ) as { [name: string]: string | boolean | Date | number } :
         null;
 
+    // create a flattened structure, eg:
+    // { 'foo.bar': 123, 'can[1]': 2 }
+    const variables = flattenObject(varMapFile);
+
     // interpolate the feature file with the varMapFile
-    const tmpSource = varMapFile ?
-        Object.entries(varMapFile).reduce((acc, [key, value]) => (
-            acc.replace(new RegExp('\\$' + key, 'g'), value.toString())
+    const tmpSource = variables ?
+        Object.entries(variables).reduce((acc, [key, value]) => (
+            acc.replace(new RegExp('\\$' + escapeStringRegexp(key), 'g'), value.toString())
         ), source + '') :
         source;
 
