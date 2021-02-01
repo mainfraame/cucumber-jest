@@ -4,9 +4,12 @@
   "description": "a basic example of using cucumber-jest",
   "scripts": {
     "test": "ENV=dev jest --verbose --logHeapUsage",
-    "test:example": "ENV=dev jest test/features/scenario.feature --verbose --logHeapUsage",
-    "test:leaks": "ENV=dev jest --verbose --detectLeaks --detectOpenHandles --logHeapUsage",
-    "test:debug": "jest --runInBand --logHeapUsage"
+    "test:tags:single": "ENV=dev TAGS=withExtraEmails jest --verbose --logHeapUsage",
+    "test:tags:multiple": "ENV=dev TAGS=withExtraEmails,withoutExtraEmails jest --verbose --logHeapUsage",
+    "test:tags:not:single": "ENV=dev TAGS=\"not withExtraEmails\" jest --verbose --logHeapUsage",
+    "test:tags:not:multiple": "ENV=dev TAGS=\"not withExtraEmails, not withoutExtraEmails\" jest --verbose --logHeapUsage",
+    "test:tags:debug": "ENV=dev jest scenarioTagsDebug.feature --verbose --logHeapUsage",
+    "test:tags:skip": "ENV=dev jest scenarioTagsSkip.feature --verbose --logHeapUsage"
   },
   "author": "dayne mentier",
   "license": "MIT",
@@ -17,12 +20,13 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@material-ui/core": "^4.11.2",
-    "@material-ui/icons": "^4.11.2",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
-    "axios": "^0.21.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "axios": "^0.21.1",
+    "jest": "26.6.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -36,7 +40,7 @@
     "@types/react": "^16.9.32",
     "@types/react-dom": "^16.9.6",
     "babel-plugin-lodash": "^3.3.4",
-    "cucumber-jest": "0.0.22",
+    "cucumber-jest": "0.1.0",
     "deep-clean": "^1.0.2",
     "jest-date-mock": "^1.0.8",
     "msw": "^0.24.1",

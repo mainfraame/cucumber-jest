@@ -1,7 +1,8 @@
 # cucumber-jest
+
 [![Build Passing](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/Naereen/badges) [![Build Passing](https://img.shields.io/badge/dependencies-up_to_date-green.svg)](https://github.com/Naereen/badges)
 
-A jest transformer for executing cucumber tests
+A transformer for executing cucumber tests in jest
 
 ```bash
 npm i cucumber-jest -D
@@ -10,22 +11,16 @@ npm i cucumber-jest -D
 ## Table of Contents
 
 - [Gherkin Features](#gherkin-features)
-
 - [Cucumber Features](#cucumber-features)
-
 - [Getting Started](#getting-started)
-
     - [Jest Config](#jest-config)
-        
-    - [Example](#example)   
+    - [World](#world)
+    - [Hooks](#hooks)
+    - [Steps](#steps)
+    - [Feature](#feature)
+    - [Tags \[Experimental\]](#tags-experimental)
+    - [Variables](#variables)
 
-        - [World](#world)
-        - [Hooks](#hooks)
-        - [Steps](#steps)
-        - [Feature](#feature)
-
-- [Gherkin Variables \[new\]](#gherkin-variables)
-   
 ## Gherkin Features
 
 | Supported          | Feature                                                                                                                                                           | Notes                                                                      | 
@@ -40,21 +35,20 @@ npm i cucumber-jest -D
 | :white_check_mark: | [Scenario](https://cucumber.io/docs/gherkin/reference/#descriptions)                                                                                              |                                                                            |
 | :white_check_mark: | [Scenario Outline](http://rmpestano.github.io/cukedoctor/cucumber-js/cucumber-js-documentation.html#Scenario-Outlines-and-Examples)                               |                                                                            |
 
-
 ## Cucumber Features
 
 | Supported          | Feature                                                                                                                                                           | Notes                                                                      | 
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
 | :white_check_mark: | [After](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#afteroptions-fn)                                                  | called after each scenario in a feature file                               |
 | :white_check_mark: | [AfterAll](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#afteralloptions-fn)                                            | called after the feature file is completed; unlike Cucumber, you will have access to "this" context here.                                  |
-|                    | [Attachments](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/attachments.md)                                                              |                                                                            |
+|                    | [Attachments](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/attachments.md)                                                              | use a reporter like ```jest-html-reporters``` and its attach utility instead |
 | :white_check_mark: | [Before](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#beforeoptions-fn)                                                | called before each scenario per feature file                               |
 | :white_check_mark: | [BeforeAll](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#beforealloptions-fn)                                          | called before the feature file is started; unlike Cucumber, you will have access to "this" context here.                                  |
 | :white_check_mark: | [Given](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#givenpattern-options-fn)                                          |                                                                            |
 |                    | [setDefaultTimeout](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#setdefaulttimeoutmilliseconds)                        | use jest.setTimeout or set the timeout property in your jest config        |
 | :white_check_mark: | [setDefinitionFunctionWrapper](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#setdefinitionfunctionwrapperwrapper)       |                                                                            |
 | :white_check_mark: | [setWorldConstructor](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#setworldconstructorconstructor)                     |                                                                            |
-|                    | [Tags](https://github.com/cucumber/cucumber-js/blob/master/docs/cli.md#tags)                                                                                      | need to identify a way to pass tags through jest                           |
+| :white_check_mark: | [Tags](https://github.com/cucumber/cucumber-js/blob/master/docs/cli.md#tags)                                                                                      | need to identify a way to pass tags through jest                           |
 | :white_check_mark: | [Then](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#thenpattern-options-fn)                                            |                                                                            |
 | :white_check_mark: | [When](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#whenpattern-options-fn)                                            |                                                                            |
 
@@ -92,39 +86,38 @@ You'll need to add the following to your jest config:
 
 1. Add ```feature``` to *moduleFileExtensions*
 2. Add ```"<rootDir>/node_modules/cucumber-jest/dist/init.js"``` to *setupFilesAfterEnv*
-   - this file calls cucumber's *supportCodeLibraryBuilder.reset* which sets up cucumber to start capturing registered hooks / steps
-   - it's important to note that this file must be list first in the *setupFilesAfterEnv* list of files; before your world, hooks, or step files
+    - this file calls cucumber's *supportCodeLibraryBuilder.reset* which sets up cucumber to start capturing registered
+      hooks / steps
+    - it's important to note that this file must be list first in the *setupFilesAfterEnv* list of files; before your
+      world, hooks, or step files
 3. Add ```"^.+\\.(feature)$": "jest-cucumber"``` as a *transformer*
 4. Add ```"<rootDir>/path/to/your/*.feature"``` as a *testMatch* pattern
 
 ## Example
 
-The examples below shows parts of the [example project](example).
+Below are taken from the example project, which can be seen [here](example).
 
+## World
 
-### World
+[setWorldConstructor](example/test/world.ts) allows you to set the context of "this" for your steps/hooks definitions.
+Unlike cucumber.js, *"this"* is accessible inside ***BeforeAll*** and ***AfterAll*** hooks.
 
-[setWorldConstuctor](example/test/world.ts) allows you to set the context of "this" for your steps/hooks definitions.
-Unlike cucumber.js, *"this"* is accessible inside of beforeAll and AfterAll hooks.
-
-This can be helpful when you want to maintain state, access *globals*, or assign component testing classes.
-The values are accessible within all Hooks
-
-```path/to/your/world.ts```
+This can be helpful when you want to maintain state, access *globals*, or assign component testing classes. The values
+are accessible within all Hooks
 
 ```typescript
-import { setWorldConstructor } from 'cucumber';
+import {setWorldConstructor} from 'cucumber';
 
 import Element from './element';
-import { $server, $spy } from './mocks';
+import {$server, $spy} from './mocks';
 
 /**
  *  $server is a reference to the mock-service-worker's (mws) setupServer
- * 
+ *
  *  $spy is a jest.fn() (mock) that is called inside of the msw mocks
  *
  *  Element class is a helper provided in the example project
- *  
+ *
  *  for more details, please see the example project
  */
 
@@ -148,17 +141,17 @@ setWorldConstructor(
 );
 ```
 
-### Hooks
+## Hooks
 
 ```typescript
-import { After, AfterAll, BeforeAll } from 'cucumber';
-import { advanceTo, clear } from 'jest-date-mock';
+import {After, AfterAll, BeforeAll} from 'cucumber';
+import {advanceTo, clear} from 'jest-date-mock';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { act } from 'react-dom/test-utils';
+import {act} from 'react-dom/test-utils';
 
-import { SignUp } from '../src/signUp';
-import { TestWorld } from './world';
+import {SignUp} from '../src/signUp';
+import {TestWorld} from './world';
 
 const $root = document.createElement('div');
 
@@ -179,9 +172,9 @@ BeforeAll(async function (this: TestWorld) {
 });
 
 After(function (this: TestWorld) {
-    
+
     this.$spy.mockClear();
-    
+
     this.$server.resetHandlers();
 });
 
@@ -193,23 +186,20 @@ AfterAll(async function (this: TestWorld) {
     });
 
     this.$server.close();
-    
+
     $root.remove();
 });
 ```
 
-### Steps
-
-```path/to/your/steps.ts```
+## Steps
 
 ```typescript
-import { Given, Then, When } from 'cucumber';
+import {Given, Then, When} from 'cucumber';
 
-import './world';
-import { TestWorld } from './world';
+import type {TestWorld} from './world';
 
 Given(/^the (\S+) component rendered$/, async function (this: TestWorld, name) {
-   
+
     await this[name].click();
 });
 
@@ -221,7 +211,7 @@ When(/^the (\S+) button is clicked$/, async function (this: TestWorld, name) {
 });
 
 When(/^the (\S+) text input value is (.*)$/, async function (this: TestWorld, name, value) {
-    
+
     await this[name].setValue(value);
 });
 
@@ -261,8 +251,7 @@ Then(/^the (\S+) inner text is "(.*)"$/, function (this: TestWorld, name, innerT
 });
 ```
 
-
-### Feature
+## Feature
 
 ```feature
 Feature: Sign Up
@@ -312,6 +301,7 @@ Feature: Sign Up
 ### Output
 
 Below is an example output from running tests against the [example project](example)
+
 ```text
  PASS  test/features/scenario.feature (113 MB heap size)
   Feature: Sign Up - Without Extra Emails
@@ -356,25 +346,67 @@ Snapshots:   0 total
 Time:        5.066 s
 ```
 
-## Gherkin Variables
+## Tags [Experimental]
 
-An additional feature of this library is **gherkin variables**. This feature allows you
-to define data that you want to inject into the feature file before parsing it and executing the test.
+### Built-In
+
+There are two tags that come built in:
+
+| tag               | description                                    |
+| ----------------- | ---------------------------------------------- |
+| @skip             | skips the scenario                             |
+| @debug            | only execute that scenario in the feature file |
+
+### Custom
+
+Tags are supported by the environment variable ```TAGS``` with a comma
+delimited list of strings. 
+
+For best results, use the tags only at the ```scenario``` level. Support for ```feature``` level will be added later.
+
+**Unfortunately, jest cli does not support custom commands and will throw an error if you try to use them. For this
+reason, we need to use environment variables to pass these.
+
+Inclusive Examples:
+
+```bash
+TAGS=foo,bar jest
+
+TAGS=foo, bar jest
+```
+
+Exclusive Examples:
+```bash
+TAGS="not foo" jest
+
+TAGS="not foo, not bar" jest
+```
+
+Exclusive & Inclusive Examples:
+```bash
+TAGS="bar, not foo" jest
+```
+
+## Variables
+
+An additional feature of this library is **variables**. This feature allows you to define data that you want to
+inject into the feature file before parsing it and executing the test.
 
 ### Use Without ENV
 
-You can use this feature by setting up a file where the name matches the feature file you
-want to use it with, and include **.vars** in the name, eg.
+You can use this feature by setting up a file where the name matches the feature file you want to use it with, and
+include **.vars** in the name, eg.
 
-| Feature File            | Variable File               |  
-| ----------------------- | --------------------------- | 
+| Feature File            | Variable File                   |  
+| ----------------------- | ------------------------------- | 
 | scenarioOutline.feature | scenarioOutline.**vars**.js     |
 | scenarioOutline.feature | scenarioOutline.**vars**.json   |
 | scenarioOutline.feature | scenarioOutline.**vars**.ts     |
 
 ### Use With ENV
-Alternatively, if you want to define multiple variable files for different environments,
-you can set the **ENV** environment variable and include the value of **ENV** as part of the filename.
+
+Alternatively, if you want to define multiple variable files for different environments, you can set the **ENV**
+environment variable and include the value of **ENV** as part of the filename.
 
 The table below contains multiple examples with different ENV values and extensions eg:
 
@@ -403,14 +435,14 @@ The properties in your variable files can be used in your feature file by prefix
 ### Example With ENV & Flat Variables Structure
 
 Testing Command:
+
 ```bash
 ENV=dev $(npm bin)/jest
 ```
 
-Variables File:
-```typescript
-// scenarioOutline.dev.vars.ts
+Variables File: ```scenarioOutline.dev.vars.ts```
 
+```typescript
 export default {
     email: 'james.dean@gmail.com',
     firstName: 'James',
@@ -419,10 +451,9 @@ export default {
 };
 ```
 
-Feature File:
+Feature File: ```scenarioOutline.feature```
+
 ```gherkin
-# scenarioOutline.feature
-  
 Feature: Sign Up
 
   Scenario Outline: Submitting <prefix> Extra Emails
@@ -455,14 +486,14 @@ Feature: Sign Up
 ### Example With ENV & Nested Variables Structure
 
 Testing Command:
+
 ```bash
 ENV=qa $(npm bin)/jest
 ```
 
-Variables File:
-```typescript
-// scenarioOutline.qa.vars.ts
+Variables File: ```scenarioOutline.qa.vars.ts```
 
+```typescript
 export default {
     user: {
         email: 'james.dean@gmail.com',
@@ -473,10 +504,9 @@ export default {
 };
 ```
 
-Feature File:
-```gherkin
-# scenarioOutline.feature
+Feature File: ```scenarioOutline.feature```
 
+```gherkin
 Feature: Sign Up - Scenario Outline [Nested]
 
   Scenario Outline: Submitting <prefix> Extra Emails
@@ -506,19 +536,20 @@ Feature: Sign Up - Scenario Outline [Nested]
       | Without | checked     | true             | visible      | visible              |
 ```
 
-** it's important to note that for nested structures you are using the path to access them, the same
-way you would access a value from an object in javascript.
+** it's important to note that for nested structures you are using the path to access them, the same way you would
+access a value from an object in javascript.
 
 ### Examples
+
 | Type                         | Feature File                                                                 | Variable File                                                                                  |
 | ---------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | Variables **Without** Env    | [scenarioOutline](example/test/features/scenarioOutline.feature)             | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts)                      |
-| Variables **With Env** (dev) | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature) | [scenarioOutlineNested.dev.vars.ts](example/test/variables/scenarioOutlineNested.dev.vars.ts)  |
-
+| Variables **WithEnv** (dev) | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature) | [scenarioOutlineNested.dev.vars.ts](example/test/variables/scenarioOutlineNested.dev.vars.ts)  |
 
 ### Variable File Rules
 
- - must be located within your project
- - uses an extension defined in your jest configuration: [**moduleFileExtensions**](https://jestjs.io/docs/en/configuration#modulefileextensions-arraystring)
- - can be parsed into a javascript object, eg. .js, .json, .ts
+- must be located within your project
+- uses an extension defined in your jest configuration: [**
+  moduleFileExtensions**](https://jestjs.io/docs/en/configuration#modulefileextensions-arraystring)
+- can be parsed into a javascript object, eg. .js, .json, .ts
 

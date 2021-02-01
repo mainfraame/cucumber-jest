@@ -108,7 +108,7 @@ window.navigator.msSaveBlob = (blob: any, fileName: string) => {
 window.navigator.msSaveOrOpenBlob = (blob: any, fileName: string) => {
 
     fs.writeFileSync(
-        `${path.resolve(process.cwd(), './tmp')}/${fileName}`,
+        path.normalize(path.join(`${path.resolve(process.cwd(), './tmp')}`,fileName)),
         blob
     );
 

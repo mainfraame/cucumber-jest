@@ -6,10 +6,12 @@ import { spawnSync } from 'child_process';
 import DataTable from 'cucumber/lib/models/data_table';
 import { default as supportCodeLibraryBuilder } from 'cucumber/lib/support_code_library_builder';
 import escapeStringRegexp from 'escape-string-regexp';
-import { flattenObject } from 'flatten-anything'
+import { flattenObject } from 'flatten-anything';
 import { interopRequireDefault } from 'jest-util';
 import fs from 'fs';
 import path from 'path';
+
+import * as env from '../env';
 import getMocks from './getMocks';
 
 supportCodeLibraryBuilder.finalize();
@@ -43,9 +45,9 @@ function parseFeature(cwd: string, featurePath: string, extensions: string[]) {
         spawnSync(
             'node',
             [
-                path.resolve(__dirname, './getPaths.js'),
+                path.normalize(path.resolve(__dirname, './getPaths.js')),
                 cwd,
-                `**/${path.basename(featurePath, fileExtension)}.${process.env.ENV}.vars`,
+                path.join('**', `${path.basename(featurePath, fileExtension)}.${env.ENV_NAME}.vars`),
                 JSON.stringify(varMapExts)
             ],
             {
@@ -59,9 +61,9 @@ function parseFeature(cwd: string, featurePath: string, extensions: string[]) {
         spawnSync(
             'node',
             [
-                path.resolve(__dirname, './getPaths.js'),
+                path.normalize(path.resolve(__dirname, './getPaths.js')),
                 cwd,
-                `**/${path.basename(featurePath, fileExtension)}.vars`,
+                path.join('**', `${path.basename(featurePath, fileExtension)}.vars`),
                 JSON.stringify(varMapExts)
             ],
             {
@@ -99,10 +101,10 @@ function parseFeature(cwd: string, featurePath: string, extensions: string[]) {
         ), source + '') :
         source;
 
-    const tmpPath = path.resolve(cwd, './node_modules/.tmp');
+    const tmpPath = path.normalize(path.resolve(path.join(cwd, path.join('node_modules', '.tmp'))));
 
     const featureSourcePath = tmpSource !== source ?
-        path.resolve(tmpPath, path.basename(featurePath)) :
+        path.normalize(path.resolve(tmpPath, path.basename(featurePath))) :
         featurePath;
 
     if (tmpSource !== source) {
@@ -199,7 +201,7 @@ function bindGherkinSteps(steps, definitions) {
             throw new Error(`\n${chalk.red('Error:')}\nCould not find a step with pattern that matches the text:\n${chalk.yellow(step.text)}\n`);
         }
 
-        if (multiSteps.length > 1 && process.env.DEBUG) {
+        if (multiSteps.length > 1) {
             process.stdout.write(`${chalk.yellow('Warning:')}\nmultiple steps found\nstep:${chalk.yellow(step.text)}\npatterns:\n${multiSteps.map((step) => (
                 `- ${step.pattern.toString()}`
             )).join('\n')}\n`);
@@ -254,13 +256,38 @@ function bindGherkinSteps(steps, definitions) {
     });
 }
 
+function includeTag(tagRaw) {
+
+    const tag = tagRaw.replace('@', '');
+
+    if (tag === 'skip') {
+        return false;
+    }
+
+    if (tag === 'debug') {
+        return true;
+    }
+
+    if (env.TAGS.length === 0) {
+        return true;
+    }
+
+    const hasExcludes = env.EXCLUDE_TAGS.length > 0;
+    const hasIncludes = env.INCLUDE_TAGS.length > 0;
+
+    const isIncluded = hasIncludes && env.INCLUDE_TAGS.includes(tag);
+    const isExcluded = hasExcludes && env.EXCLUDE_TAGS.includes(tag);
+
+    return isExcluded ? false : !hasIncludes || isIncluded;
+}
+
 function parseGherkinSuites(cwd, feature: string, extensions: string[], cucumberSupportCode: any) {
 
     const featurePath = parseFeature(cwd, feature, extensions);
 
     const source = fs.readFileSync(featurePath, 'utf8');
 
-    const events = generateMessages(source, path.relative(cwd, featurePath), {
+    const events = generateMessages(source, path.normalize(path.relative(cwd, featurePath)), {
         includeSource: false,
         includeGherkinDocument: true,
         includePickles: true,
@@ -271,22 +298,55 @@ function parseGherkinSuites(cwd, feature: string, extensions: string[], cucumber
     const hasBackground = !!document.children[0].background;
     const specs = hasBackground ? document.children.slice(1) : document.children;
 
+    const hasExcludeTags = env.EXCLUDE_TAGS.length > 0;
+    const hasTags = env.TAGS.length > 0;
+
+    const documentTags = document.tags.map(({name}) => name);
+    const documentHasTags = documentTags.length > 0 && documentTags.some(includeTag);
+    const shouldSkipFeature = documentTags.includes('@skip');
+
+    const documentContainsSpecsWithTags = specs.some((spec) => (
+        spec.scenario.tags.length &&
+        spec.scenario.tags.some(({name}) => includeTag(name))
+    ));
+
+    const scenarioTags = specs.reduce((acc, spec) => ([
+        ...acc,
+        ...spec.scenario.tags.map(({name}) => name)
+    ]), []);
+
+    const documentHasDebugTag = scenarioTags.includes('@debug');
+
     const scenarios = specs.reduce((acc, spec) => {
 
+        const tags = spec.scenario.tags.map(({name}) => name);
+
         const examples = parseGherkinExampleTables(spec.scenario.examples);
+
+        const shouldSkipForDebug = (documentHasDebugTag && !tags.includes('@debug'));
+
+        const skip = shouldSkipForDebug || tags.includes('@skip') ||
+            (hasTags && !!tags.length && !tags.some(includeTag));
 
         return [
             ...acc,
             ...examples.length ?
-                generateExampleTableSteps(examples, spec.scenario) :
+                generateExampleTableSteps(examples, spec.scenario).map((spec) => ({
+                    ...spec,
+                    skip
+                })) :
                 [
                     {
                         ...spec.scenario,
+                        skip,
                         steps: spec.scenario.steps
                     }
                 ]
         ];
     }, []);
+
+    const skipFeature = shouldSkipFeature || (hasTags && !documentHasTags && !documentContainsSpecsWithTags && !hasExcludeTags) ||
+        scenarios.length === 0;
 
     const suites = scenarios.map((scenario) => ({
         ...scenario,
@@ -303,6 +363,7 @@ function parseGherkinSuites(cwd, feature: string, extensions: string[], cucumber
         afterAll: cucumberSupportCode.afterTestRunHookDefinitions,
         beforeEach: cucumberSupportCode.beforeTestCaseHookDefinitions,
         beforeAll: cucumberSupportCode.beforeTestRunHookDefinitions,
+        skip: skipFeature,
         suites: suites.map((suite) => ({
             ...suite,
             steps: bindGherkinSteps(
@@ -342,72 +403,78 @@ export default function execTest(cwd: string, featurePath: string, moduleFileExt
 
     const fileName = path.basename(featurePath, path.extname(featurePath));
 
-    let world;
+    const hasSomeActiveSuites = spec.suites.some((suite) => !suite.skip);
 
-    beforeAll(async () => {
+    const shouldSkipSuite = spec.skip || !hasSomeActiveSuites;
 
-        world = new supportCodeLibraryBuilder.options.World({});
+    const fn = shouldSkipSuite ? xdescribe || describe.skip : describe;
 
-        for (let i = 0; i < spec.beforeAll.length; i++) {
-            await act(async () => {
-                await spec.beforeAll[i].code.apply(world, [spec, fileName]);
-            });
-        }
-    });
+    fn(`Feature: ${spec.document.name}`, () => {
 
-    afterAll(async () => {
+        let world;
 
-        for (let i = 0; i < spec.afterAll.length; i++) {
-            await act(async () => {
-                await spec.afterAll[i].code.apply(world, [spec, fileName]);
-            });
-        }
+        beforeAll(async () => {
 
-        world = null;
-    });
+            world = new supportCodeLibraryBuilder.options.World({});
 
-    if (process.env.JEST_RETRY_TIMES) {
-        jest.retryTimes(+process.env.JEST_RETRY_TIMES);
-    }
-
-    spec.suites.forEach((suite) => {
-
-        describe(spec.document.keyword + ': ' + spec.document.name + ' - ' + suite.name, () => {
-
-            beforeAll(async () => {
-                for (let i = 0; i < spec.beforeEach.length; i++) {
-                    await act(async () => {
-                        await spec.beforeEach[i].code.apply(world, [{spec, suite: suite}, fileName]);
-                    });
-                }
-            });
-
-            afterAll(async () => {
-                for (let i = 0; i < spec.afterEach.length; i++) {
-                    await act(async () => {
-                        await spec.afterEach[i].code.apply(world, [{spec, suite: suite}, fileName]);
-                    });
-                }
-            });
-
-            for (let i = 0; i < suite.steps.given.length; i++) {
-                it(suite.steps.given[i].keyword + suite.steps.given[i].text, async () => {
-                    await suite.steps.given[i].code.apply(world, suite.steps.given[i].stepArgs);
-                });
-            }
-
-            for (let i = 0; i < suite.steps.when.length; i++) {
-                it(suite.steps.when[i].description, async () => {
-                    await suite.steps.when[i].code.apply(world, suite.steps.when[i].stepArgs);
-                });
-            }
-
-            for (let i = 0; i < suite.steps.then.length; i++) {
-                it(suite.steps.then[i].description, async () => {
-                    await suite.steps.then[i].code.apply(world, suite.steps.then[i].stepArgs);
+            for (let i = 0; i < spec.beforeAll.length; i++) {
+                await act(async () => {
+                    await spec.beforeAll[i].code.apply(world, [spec, fileName]);
                 });
             }
         });
-    });
 
+        afterAll(async () => {
+
+            for (let i = 0; i < spec.afterAll.length; i++) {
+                await act(async () => {
+                    await spec.afterAll[i].code.apply(world, [spec, fileName]);
+                });
+            }
+
+            world = null;
+        });
+
+        spec.suites.forEach((suite) => {
+
+            const fn = suite.skip ? xdescribe || describe.skip : describe;
+
+            fn(`${suite.keyword}: ${suite.name}`, () => {
+
+                beforeAll(async () => {
+                    for (let i = 0; i < spec.beforeEach.length; i++) {
+                        await act(async () => {
+                            await spec.beforeEach[i].code.apply(world, [{spec, suite: suite}, fileName]);
+                        });
+                    }
+                });
+
+                afterAll(async () => {
+                    for (let i = 0; i < spec.afterEach.length; i++) {
+                        await act(async () => {
+                            await spec.afterEach[i].code.apply(world, [{spec, suite: suite}, fileName]);
+                        });
+                    }
+                });
+
+                for (let i = 0; i < suite.steps.given.length; i++) {
+                    it(suite.steps.given[i].keyword + suite.steps.given[i].text, async () => {
+                        await suite.steps.given[i].code.apply(world, suite.steps.given[i].stepArgs);
+                    });
+                }
+
+                for (let i = 0; i < suite.steps.when.length; i++) {
+                    it(suite.steps.when[i].description, async () => {
+                        await suite.steps.when[i].code.apply(world, suite.steps.when[i].stepArgs);
+                    });
+                }
+
+                for (let i = 0; i < suite.steps.then.length; i++) {
+                    it(suite.steps.then[i].description, async () => {
+                        await suite.steps.then[i].code.apply(world, suite.steps.then[i].stepArgs);
+                    });
+                }
+            });
+        });
+    });
 }

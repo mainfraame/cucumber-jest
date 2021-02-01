@@ -5,7 +5,7 @@ export default function getMocks(cwd: string) {
 
     const mocks = spawnSync(
         'node',
-        [path.resolve(__dirname, './getPaths.js'), cwd, '**/__mocks__/**/*'],
+        [path.normalize(path.resolve(__dirname, 'getPaths.js')), cwd, path.join('**','__mocks__','**','*')],
         {encoding: 'utf-8'}
     ).stdout;
 
@@ -13,8 +13,8 @@ export default function getMocks(cwd: string) {
         .filter((mock) => !mock.includes('node_modules'))
         .map((mock) => mock.replace(process.cwd(), ''))
         .map((mock) => (
-            mock.startsWith('/__mocks__/') ?
-                path.dirname(mock.replace('/__mocks__/', '')) :
+            mock.startsWith(path.normalize('/__mocks__/')) ?
+                path.dirname(path.normalize(mock.replace('/__mocks__/', ''))) :
                 mock
         ));
 }
