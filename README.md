@@ -478,12 +478,11 @@ TAGS="bar, not foo" jest
 
 ## Variables
 
-An additional feature of this library is **variables**. This feature allows you to define data that you want to
-inject into the feature file before parsing it and executing the test.
+You can inject values into your feature files using variables.
 
 ### Use Without ENV
 
-You can use this feature by setting up a file where the name matches the feature file you want to use it with, and
+Set up a file where the name matches the file you're targeting and
 include **.vars** in the name, eg.
 
 | Feature File            | Variable File                   |  
@@ -494,10 +493,10 @@ include **.vars** in the name, eg.
 
 ### Use With ENV
 
-Alternatively, if you want to define multiple variable files for different environments, you can set the **ENV**
-environment variable and include the value of **ENV** as part of the filename.
+Alternatively, you can have variables target an environment by setting the ```ENV``` environment variable and using it in 
+the variables file name.
 
-The table below contains multiple examples with different ENV values and extensions eg:
+Below are multiple examples with different ENV values and extensions:
 
 | Environment Variable    | Feature File            | Variable File                      |  
 | ----------------------- | ----------------------- | ---------------------------------- | 
@@ -513,7 +512,7 @@ The table below contains multiple examples with different ENV values and extensi
 
 ### Example Variable Use
 
-The properties in your variable files can be used in your feature file by prefixing the json path with **$**, eg.
+Properties in your variable files can be used in your feature file by prefixing the json path with **$**, eg.
 
 | Property Name In Feature File | Property Name In Variable File |
 | ----------------------------- | ------------------------------ |
@@ -523,13 +522,13 @@ The properties in your variable files can be used in your feature file by prefix
 
 ### Example With ENV & Flat Variables Structure
 
-Testing Command:
+#### Testing Command:
 
 ```bash
 ENV=dev $(npm bin)/jest
 ```
 
-Variables File: ```scenarioOutline.dev.vars.ts```
+#### Variables File: ```scenarioOutline.dev.vars.ts```
 
 ```typescript
 export default {
@@ -540,7 +539,7 @@ export default {
 };
 ```
 
-Feature File: ```scenarioOutline.feature```
+#### Feature File: ```scenarioOutline.feature```
 
 ```gherkin
 Feature: Sign Up
@@ -574,13 +573,13 @@ Feature: Sign Up
 
 ### Example With ENV & Nested Variables Structure
 
-Testing Command:
+#### Testing Command:
 
 ```bash
 ENV=qa $(npm bin)/jest
 ```
 
-Variables File: ```scenarioOutline.qa.vars.ts```
+#### Variables File: ```scenarioOutline.qa.vars.ts```
 
 ```typescript
 export default {
@@ -593,7 +592,7 @@ export default {
 };
 ```
 
-Feature File: ```scenarioOutline.feature```
+#### Feature File: ```scenarioOutline.feature```
 
 ```gherkin
 Feature: Sign Up - Scenario Outline [Nested]
@@ -625,15 +624,14 @@ Feature: Sign Up - Scenario Outline [Nested]
       | Without | checked     | true             | visible      | visible              |
 ```
 
-** it's important to note that for nested structures you are using the path to access them, the same way you would
-access a value from an object in javascript.
+** to accessing properties, please use standard javascript property pathing.
 
 ### Examples
 
 | Type                         | Feature File                                                                 | Variable File                                                                                  |
 | ---------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | Variables **Without** Env    | [scenarioOutline](example/test/features/scenarioOutline.feature)             | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts)                      |
-| Variables **WithEnv** (dev) | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature) | [scenarioOutlineNested.dev.vars.ts](example/test/variables/scenarioOutlineNested.dev.vars.ts)  |
+| Variables **WithEnv** (dev)  | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature) | [scenarioOutlineNested.dev.vars.ts](example/test/variables/scenarioOutlineNested.dev.vars.ts)  |
 
 ### Variable File Rules
 
