@@ -451,36 +451,30 @@ Feature: Sign Up W/ Background & Tags Example
 
 ### Custom
 
-Tags are supported by the environment variable ```TAGS``` with a comma
-delimited list of strings. 
-
-For best results, use the tags only at the ```scenario``` level. Support for ```feature``` level will be added later.
-
-**Unfortunately, jest cli does not support custom commands and will throw an error if you try to use them. For this
+Tags are supported by using the environment variable ```TAGS``` with a comma
+delimited list of strings. For best results, use the tags only at the ```scenario``` level. Support for ```feature``` level will be added later.
+***Unfortunately***, jest cli does not support custom commands and will throw an error if you try to use them. For this
 reason, we need to use environment variables to pass these.
 
-Inclusive Examples:
+#### Inclusive Example:
 
 ```bash
 TAGS=foo,bar jest
 
-TAGS=foo, bar jest
+TAGS=foo, bar jest # space is trimmed
 ```
 
-Exclusive Examples:
+#### Exclusive Example:
 ```bash
 TAGS="not foo" jest
 
 TAGS="not foo, not bar" jest
 ```
 
-Exclusive & Inclusive Examples:
+#### Exclusive & Inclusive Example:
 ```bash
 TAGS="bar, not foo" jest
 ```
-
-
-
 
 ## Variables
 
