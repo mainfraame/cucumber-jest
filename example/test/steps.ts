@@ -7,7 +7,7 @@ Given(/^the (\S+) component rendered$/, async function (this: TestWorld, name) {
     await this[name].click();
 });
 
-When(/^the (\S+) button is clicked$/, async function (this: TestWorld, name) {
+When('the {word} button is clicked', async function (this: TestWorld, name) {
 
     await this[name].click();
 
