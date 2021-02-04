@@ -207,9 +207,7 @@ function bindGherkinSteps(steps, definitions) {
             )).join('\n')}\n`);
         }
 
-        const args = definition.pattern ?
-            Array.from(definition.pattern.exec(step.text)).slice(1) :
-            [];
+        const args = Array.from(definition.expression?.regexp?.exec(step.text) || []).slice(1)
 
         const stepArgs = [
             ...args,

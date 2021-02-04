@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "./build.sh"
+    "build": "./build.sh",
+    "copy:build": "cp -rf ./dist ./example/node_modules/cucumber-jest/"
   },
   "repository": {
     "type": "git",

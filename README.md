@@ -75,7 +75,7 @@ You'll need to add the following to your jest config:
   ],
   "transform": {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
-    "^.+\\.(feature)$": "jest-cucumber" // <--- *3
+    "^.+\\.(feature)$": "cucumber-jest" // <--- *3
   },
   "testMatch": [
     "<rootDir>/path/to/your/*.feature" // <--- *4
@@ -90,7 +90,7 @@ You'll need to add the following to your jest config:
       hooks / steps
     - it's important to note that this file must be list first in the *setupFilesAfterEnv* list of files; before your
       world, hooks, or step files
-3. Add ```"^.+\\.(feature)$": "jest-cucumber"``` as a *transformer*
+3. Add ```"^.+\\.(feature)$": "cucumber-jest"``` as a *transformer*
 4. Add ```"<rootDir>/path/to/your/*.feature"``` as a *testMatch* pattern
 
 ## Example
