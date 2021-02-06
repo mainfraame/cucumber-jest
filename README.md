@@ -20,6 +20,7 @@ npm i cucumber-jest -D
     - [Feature](#feature)
     - [Tags \[Experimental\]](#tags-experimental)
     - [Variables](#variables)
+- [Cucumber Docs](#cucumber-docs)
 
 ## Gherkin Features
 
@@ -303,14 +304,15 @@ Feature: Sign Up
 Below is an example output from running tests against the [example project](example)
 
 ```text
- PASS  test/features/scenario.feature (113 MB heap size)
-  Feature: Sign Up - Without Extra Emails
-    ✓ Given the firstName text input value is James (13 ms)
-    ✓ And the lastName text input value is Dean (8 ms)
-    ✓ And the email text input value is james.dean@gmail.com (9 ms)
-    ✓ And the password text input value is itsASecretShh... (7 ms)
-    ✓ When the submit button is clicked (83 ms)
-    ✓ Then POST /api/sign-up is called with the request body:
+  PASS  test/features/scenario.feature (110 MB heap size)
+  Feature: Sign Up
+    Scenario: Without Extra Emails
+      ✓ Given the firstName text input value is James (21 ms)
+      ✓ And the lastName text input value is Dean (8 ms)
+      ✓ And the email text input value is james.dean@gmail.com (8 ms)
+      ✓ And the password text input value is itsASecretShh... (10 ms)
+      ✓ When the submit button is clicked (200 ms)
+      ✓ Then POST /api/sign-up is called with the request body:
        {
            "firstName": "James",
            "lastName": "Dean",
@@ -319,16 +321,16 @@ Below is an example output from running tests against the [example project](exam
            "extraEmails": false,
            "date": "2019-12-01T15:00:00.000Z"
        } (2 ms)
-    ✓ And the successAlert is visible (2 ms)
-    ✓ And the showExtraEmailsAlert is not visible (2 ms)
-  Feature: Sign Up - With Extra Emails
-    ✓ Given the firstName text input value is James (8 ms)
-    ✓ And the lastName text input value is Dean (8 ms)
-    ✓ And the email text input value is james.dean@gmail.com (8 ms)
-    ✓ And the password text input value is itsASecretShh... (7 ms)
-    ✓ And the extraEmails checkbox input is checked (7 ms)
-    ✓ When the submit button is clicked (42 ms)
-    ✓ Then POST /api/sign-up is called with the request body:
+      ✓ And the successAlert is visible (26 ms)
+      ✓ And the showExtraEmailsAlert is not visible (12 ms)
+    Scenario: With Extra Emails
+      ✓ Given the firstName text input value is James (16 ms)
+      ✓ And the lastName text input value is Dean (9 ms)
+      ✓ And the email text input value is james.dean@gmail.com (11 ms)
+      ✓ And the password text input value is itsASecretShh... (10 ms)
+      ✓ And the extraEmails checkbox input is checked (45 ms)
+      ✓ When the submit button is clicked (84 ms)
+      ✓ Then POST /api/sign-up is called with the request body:
        {
            "firstName": "James",
            "lastName": "Dean",
@@ -337,8 +339,8 @@ Below is an example output from running tests against the [example project](exam
            "extraEmails": true,
            "date": "2019-12-01T15:00:00.000Z"
        } (1 ms)
-    ✓ And the successAlert is visible (1 ms)
-    ✓ And the showExtraEmailsAlert is visible
+      ✓ And the successAlert is visible (2 ms)
+      ✓ And the showExtraEmailsAlert is visible (1 ms)
 
 Test Suites: 1 passed, 1 total
 Tests:       17 passed, 17 total
@@ -386,8 +388,8 @@ Feature: Sign Up W/ Background & Tags Example
     And the showExtraEmailsAlert is not visible
 
   Scenario: With Extra Emails
-    And the extraEmails checkbox input is checked
-    When the submit button is clicked
+    When the extraEmails checkbox input is checked
+    And the submit button is clicked
     Then POST /api/sign-up is called with the request body:
       """
        {
@@ -432,8 +434,8 @@ Feature: Sign Up W/ Background & Tags Example
     And the showExtraEmailsAlert is not visible
 
   Scenario: With Extra Emails
-    And the extraEmails checkbox input is checked
-    When the submit button is clicked
+    When the extraEmails checkbox input is checked
+    And the submit button is clicked
     Then POST /api/sign-up is called with the request body:
       """
        {
@@ -506,9 +508,6 @@ Below are multiple examples with different ENV values and extensions:
 | ENV=**qa**              | scenarioOutline.feature | scenarioOutline.**qa**.vars.js     |
 | ENV=**qa**              | scenarioOutline.feature | scenarioOutline.**qa**.vars.json   |
 | ENV=**qa**              | scenarioOutline.feature | scenarioOutline.**qa**.vars.ts     |
-| ENV=**cert**            | scenarioOutline.feature | scenarioOutline.**cert**.vars.js   |
-| ENV=**cert**            | scenarioOutline.feature | scenarioOutline.**cert**.vars.json |
-| ENV=**cert**            | scenarioOutline.feature | scenarioOutline.**cert**.vars.ts   |
 
 ### Example Variable Use
 
@@ -638,4 +637,23 @@ Feature: Sign Up - Scenario Outline [Nested]
 - must be located within your project
 - uses an extension defined in your jest configuration: [**moduleFileExtensions**](https://jestjs.io/docs/en/configuration#modulefileextensions-arraystring)
 - can be parsed into a javascript object, eg. .js, .json, .ts
+
+## Cucumber Docs
+
+Here are some useful links to the cucumber-js docs:
+
+- [after](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#afteroptions-fn)
+- [afterAll](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#afteralloptions-fn)
+- [before](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#beforeoptions-fn)
+- [beforeAll](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#beforealloptions-fn)
+- [beforeAll / afterAll example](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/hooks.md#beforeall--afterall)
+- [defineStep](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#definesteppattern-options-fn), aka Given/When/Then (aliases)
+- [data tables](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/data_table_interface.md)
+- [expressions](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/step_definitions.md#cucumber-expressions)
+- [Hooks](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/hooks.md)
+- [setDefinitionFunctionWrapper](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#setdefinitionfunctionwrapperwrapper)
+- [setDefinitionFunctionWrapper example](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/step_definitions.md#definition-function-wrapper)
+- [setWorldConstructor](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#setworldconstructorconstructor)
+- [World](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/world.md)
+
 
