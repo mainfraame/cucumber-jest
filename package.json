@@ -1,6 +1,6 @@
 {
   "name": "cucumber-jest",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "a jest transformer for executing cucumber tests in jest",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
