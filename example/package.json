@@ -41,7 +41,7 @@
         "@types/react": "^16.9.32",
         "@types/react-dom": "^16.9.6",
         "babel-plugin-lodash": "^3.3.4",
-        "cucumber-jest": "file:../cucumber-jest-0.1.2.tgz",
+        "cucumber-jest": "0.1.2",
         "deep-clean": "^1.0.2",
         "jest-date-mock": "^1.0.8",
         "msw": "^0.24.1",
