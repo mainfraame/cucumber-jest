@@ -9,14 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 
-- refactored structure of project
 - added support for node v10 [3fca142](https://github.com/mainfraame/cucumber-jest/commit/3fca142678131e871ee2422a150735c466d3acc3)
 - added prettier, import sort, and husky to standardize code style on pre-commit [ac7128e](https://github.com/mainfraame/cucumber-jest/commit/ac7128e7e6bdc4c1d9059cf44cef22199d44820e)
-- updated example project to support node v10
+- refactored structure of project [ba4c840](https://github.com/mainfraame/cucumber-jest/commit/ba4c840ce6f4e477b5d2501ced061b8033ebe13d)
+- updated example project to support node v10 [ba4c840](https://github.com/mainfraame/cucumber-jest/commit/ba4c840ce6f4e477b5d2501ced061b8033ebe13d)
 
 ### Notes
 
-- if you are having an issue with running this latest version, run jest clearCache:
+- if you had a previous version installed and are having issues running this version, run jest clearCache:
 ```$(npm bin)/jest --clearCache```
 
 ## [0.1.1] - 2021-02-06

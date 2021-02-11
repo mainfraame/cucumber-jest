@@ -31,11 +31,9 @@ export default {
         const keepMocks = JSON.stringify(
             process.env.KEEP_MOCKS ? JSON.parse(process.env.KEEP_MOCKS) : []
         );
-        //const execTest = require('cucumber-jest/dist/utils/parseFeature');
+
         const testFile = `
-            import {exec} from 'cucumber-jest/dist/exec';
-           
-            
+            import {exec} from 'cucumber-jest/dist/exec';            
             exec('${jestConfig.cwd}', '${filePath}', ${extensions}, ${restoreMocks}, ${keepMocks})
         `;
 
