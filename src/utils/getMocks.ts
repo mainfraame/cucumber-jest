@@ -1,11 +1,11 @@
 import {spawnSync} from 'child_process';
 import path from 'path';
 
-export default function getMocks(cwd: string) {
+export function getMocks(cwd: string) {
     const mocks = spawnSync(
         'node',
         [
-            path.normalize(path.resolve(__dirname, 'getPaths.js')),
+            path.normalize(path.join(__dirname, 'getPaths.js')),
             cwd,
             path.join('**', '__mocks__', '**', '*')
         ],

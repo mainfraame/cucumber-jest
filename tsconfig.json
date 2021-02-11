@@ -2,7 +2,7 @@
     "compilerOptions": {
         "jsx": "react",
         "module": "esnext",
-        "lib": ["ES2015", "ES2016", "ES2018", "ESNext", "DOM"],
+        "lib": ["ES2018", "ESNext", "DOM"],
         "allowSyntheticDefaultImports": true,
         "strict": false,
         "declaration": true,

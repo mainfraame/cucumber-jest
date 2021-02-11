@@ -41,7 +41,7 @@
         "escape-string-regexp": "^4.0.0",
         "fast-glob": "^3.2.4",
         "flatten-anything": "^2.0.4",
-        "jest": ">=26.0.0",
+        "jest": ">=26.0.1",
         "react-dom": ">=16.9.0"
     },
     "devDependencies": {

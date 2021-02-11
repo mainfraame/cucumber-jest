@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+// this is a mock for missing window properties in JSDOM
 declare global {
     interface Window {
         WINDOW_HEIGHT: number;

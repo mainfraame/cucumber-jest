@@ -30,6 +30,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",
+        "@babel/plugin-proposal-class-properties": "^7.12.13",
         "@babel/plugin-transform-typescript": "^7.12.1",
         "@babel/preset-env": "^7.12.7",
         "@babel/preset-react": "^7.12.7",
@@ -66,7 +67,7 @@
         "restoreMocks": true,
         "setupFiles": [
             "<rootDir>/node_modules/cucumber-jest/dist/init.js",
-            "<rootDir>/node_modules/cucumber-jest/dist/window.js",
+            "<rootDir>/test/window.ts",
             "jest-date-mock"
         ],
         "setupFilesAfterEnv": [
