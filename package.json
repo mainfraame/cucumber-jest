@@ -1,53 +1,93 @@
 {
-  "name": "cucumber-jest",
-  "version": "0.1.1",
-  "description": "a jest transformer for executing cucumber tests in jest",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "./build.sh",
-    "copy:build": "cp -rf ./dist ./example/node_modules/cucumber-jest/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mentierd/cucumber-jest.git"
-  },
-  "keywords": [
-    "jest",
-    "cucumber",
-    "transformer",
-    "gherkin"
-  ],
-  "author": "dayne mentier",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/mentierd/cucumber-jest/issues"
-  },
-  "homepage": "https://github.com/mentierd/cucumber-jest#readme",
-  "dependencies": {
-    "@cucumber/gherkin": "11.0.0",
-    "ascii-table": "0.0.9",
-    "babel-preset-jest": ">=26.0.0",
-    "cucumber": ">=6.0.0",
-    "escape-string-regexp": "^4.0.0",
-    "fast-glob": "^3.2.4",
-    "flatten-anything": "^2.0.4",
-    "jest": ">=26.0.1",
-    "react-dom": ">=16.9.0"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.12.8",
-    "@babel/core": "^7.12.9",
-    "@babel/plugin-transform-typescript": "^7.12.1",
-    "@babel/preset-env": "^7.12.7",
-    "@babel/preset-typescript": "^7.12.7",
-    "@types/cucumber": "^6.0.1",
-    "@types/jest": "^26.0.16",
-    "@types/node": "^14.6.2",
-    "@types/qs": "^6.9.2",
-    "@types/react-dom": "^16.9.8",
-    "babel-plugin-add-module-exports": "^1.0.4",
-    "chalk": "^4.1.0",
-    "typescript": "^4.1.2"
-  }
+    "name": "cucumber-jest",
+    "version": "0.1.2",
+    "description": "a jest transformer for executing cucumber tests in jest",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "engines": {
+        "node": ">=10.0.0"
+    },
+    "files": [
+        "dist",
+        "src"
+    ],
+    "scripts": {
+        "build": "./build.sh",
+        "copy:build": "cp -rf ./dist ./example/node_modules/cucumber-jest/",
+        "format": "prettier \"{,!(node_modules|dist)/**/}*.{js,json,ts,tsx}\" --loglevel warn -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mentierd/cucumber-jest.git"
+    },
+    "keywords": [
+        "jest",
+        "cucumber",
+        "transformer",
+        "gherkin"
+    ],
+    "author": "dayne mentier",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/mentierd/cucumber-jest/issues"
+    },
+    "homepage": "https://github.com/mentierd/cucumber-jest#readme",
+    "dependencies": {
+        "@cucumber/gherkin": "11.0.0",
+        "ascii-table": "0.0.9",
+        "babel-preset-jest": ">=26.0.0",
+        "chalk": "^4.1.0",
+        "cucumber": ">=6.0.0",
+        "escape-string-regexp": "^4.0.0",
+        "fast-glob": "^3.2.4",
+        "flatten-anything": "^2.0.4",
+        "jest": ">=26.0.0",
+        "react-dom": ">=16.9.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.12.8",
+        "@babel/core": "^7.12.9",
+        "@babel/plugin-transform-typescript": "^7.12.1",
+        "@babel/preset-env": "^7.12.7",
+        "@babel/preset-typescript": "^7.12.7",
+        "@types/cucumber": "^6.0.1",
+        "@types/jest": "^26.0.16",
+        "@types/node": "^14.6.2",
+        "@types/qs": "^6.9.2",
+        "@types/react-dom": "^16.9.8",
+        "babel-plugin-add-module-exports": "^1.0.4",
+        "husky": "^4.3.8",
+        "import-sort-style-module": "^6.0.0",
+        "prettier": "^2.2.1",
+        "prettier-plugin-import-sort": "^0.0.6",
+        "typescript": "^4.1.2"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm run format && npm run build && git add ."
+        }
+    },
+    "importSort": {
+        ".js, .jsx, .ts, .tsx": {
+            "style": "module",
+            "parser": "typescript"
+        }
+    },
+    "prettier": {
+        "arrowParens": "always",
+        "bracketSpacing": false,
+        "embeddedLanguageFormatting": "auto",
+        "htmlWhitespaceSensitivity": "strict",
+        "insertPragma": false,
+        "jsxBracketSameLine": true,
+        "jsxSingleQuote": true,
+        "printWidth": 80,
+        "quoteProps": "consistent",
+        "requirePragma": false,
+        "semi": true,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "trailingComma": "none",
+        "useTabs": false
+    }
 }
