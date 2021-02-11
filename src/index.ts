@@ -32,7 +32,7 @@ export default {
         );
 
         const testFile = `
-            import execTest from 'cucumber-jest/dist/utils/parseFeature';
+            const execTest = require('cucumber-jest/dist/utils/parseFeature');
             
             execTest('${jestConfig.cwd}', '${filePath}', ${extensions}, ${restoreMocks}, ${keepMocks})
         `;
