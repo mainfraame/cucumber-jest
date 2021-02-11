@@ -9,7 +9,9 @@
     },
     "files": [
         "dist",
-        "src"
+        "src",
+        "CHANGELOG.md",
+        "README.md"
     ],
     "scripts": {
         "build": "./build.sh",
