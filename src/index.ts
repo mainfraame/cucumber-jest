@@ -33,7 +33,7 @@ export default {
         );
 
         const testFile = `
-            import {exec} from 'cucumber-jest/dist/exec';            
+            const exec = require('cucumber-jest/dist/exec').exec;            
             exec('${jestConfig.cwd}', '${filePath}', ${extensions}, ${restoreMocks}, ${keepMocks})
         `;
 
