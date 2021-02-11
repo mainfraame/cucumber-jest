@@ -6,6 +6,12 @@ module.exports = function (api) {
         plugins: [
             'lodash',
             [
+                '@babel/plugin-proposal-class-properties',
+                {
+                    loose: true
+                }
+            ],
+            [
                 '@babel/plugin-transform-typescript',
                 {
                     isTSX: true
@@ -17,7 +23,7 @@ module.exports = function (api) {
                 '@babel/preset-env',
                 {
                     targets: {
-                        node: 'current'
+                        node: '10'
                     }
                 }
             ],
