@@ -1,15 +1,13 @@
-import { setWorldConstructor } from 'cucumber';
+import {setWorldConstructor} from 'cucumber';
 
 import Element from './element';
-import { $server, $spy } from './mocks';
+import {$server, $spy} from './mocks';
 
 // axios uses this library, which mutates a nodejs internal.
 // when this occurs, jest will leak memory. since this isn't necessary we can mock it
 jest.mock('follow-redirects', () => ({
-    http: function () {
-    },
-    https: function () {
-    }
+    http: function () {},
+    https: function () {}
 }));
 
 export class TestWorld {
@@ -27,6 +25,4 @@ export class TestWorld {
     showExtraEmailsAlert = new Element({dataId: 'showExtraEmailsAlert'});
 }
 
-setWorldConstructor(
-    TestWorld
-);
+setWorldConstructor(TestWorld);

@@ -1,11 +1,12 @@
-import { transform } from '@babel/core';
-import jestPreset from 'babel-preset-jest';
 import crypto from 'crypto';
-import type { Config } from '@jest/types';
+
+import {transform} from '@babel/core';
+import type {Config} from '@jest/types';
+import jestPreset from 'babel-preset-jest';
 
 export default {
     canInstrument: false,
-    getCacheKey: (fileData, filename, configString, {instrument}) => (
+    getCacheKey: (fileData, filename, configString, {instrument}) =>
         crypto
             .createHash('md5')
             .update('\0', 'utf8')
@@ -17,18 +18,18 @@ export default {
             .update('\0', 'utf8')
             .update('\0', 'utf8')
             .update(instrument ? 'instrument' : '')
-            .digest('hex')
-    ),
-    process(src: string, filePath: Config.Path, jestConfig: Config.ProjectConfig) {
-
+            .digest('hex'),
+    process(
+        src: string,
+        filePath: Config.Path,
+        jestConfig: Config.ProjectConfig
+    ) {
         const extensions = JSON.stringify(jestConfig.moduleFileExtensions);
 
         const restoreMocks = (!!jestConfig.restoreMocks).toString();
 
         const keepMocks = JSON.stringify(
-            process.env.KEEP_MOCKS ?
-                JSON.parse(process.env.KEEP_MOCKS) :
-                []
+            process.env.KEEP_MOCKS ? JSON.parse(process.env.KEEP_MOCKS) : []
         );
 
         const testFile = `

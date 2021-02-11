@@ -1,19 +1,20 @@
-import { act } from 'react-dom/test-utils';
+import {act} from 'react-dom/test-utils';
 
 type ElementProps = {
-    dataId?: string,
-    id?: string,
-    name?: string,
-    selector?: string
+    dataId?: string;
+    id?: string;
+    name?: string;
+    selector?: string;
 };
 
 export default class Element {
-
     private readonly _selector: string;
 
     private _element(): HTMLInputElement | HTMLButtonElement {
-        return document.querySelector<HTMLInputElement | HTMLButtonElement>(this._selector);
-    };
+        return document.querySelector<HTMLInputElement | HTMLButtonElement>(
+            this._selector
+        );
+    }
 
     constructor(props: ElementProps) {
         if (props.dataId) {
@@ -46,12 +47,11 @@ export default class Element {
     }
 
     getAttribute(attr: string) {
-
         if (['checked', 'disabled', 'readonly'].includes(attr)) {
-            return !!(this._element()[attr]);
+            return !!this._element()[attr];
         }
 
-        return (this._element())[attr];
+        return this._element()[attr];
     }
 
     getValue() {
@@ -59,7 +59,9 @@ export default class Element {
     }
 
     innerText() {
-        return (this._element().innerText || this._element().textContent).trim();
+        return (
+            this._element().innerText || this._element().textContent
+        ).trim();
     }
 
     isInDom() {
@@ -67,17 +69,21 @@ export default class Element {
     }
 
     async setValue(value: string, isMask?: boolean) {
-
         await this._element().focus();
 
-        const set = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+        const set = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype,
+            'value'
+        ).set;
 
         await act(async () => {
             set.call(
                 this._element(),
-                typeof value === 'string' ?
-                    (isMask ? value.replace(/[/|\\|:|,|.|\s]/g, '') : value) :
-                    value
+                typeof value === 'string'
+                    ? isMask
+                        ? value.replace(/[/|\\|:|,|.|\s]/g, '')
+                        : value
+                    : value
             );
         });
 
@@ -89,7 +95,6 @@ export default class Element {
             let isDisabled = this.getAttribute('disabled');
 
             while (isDisabled) {
-
                 await new Promise((resolve) => setTimeout(resolve, 10));
 
                 isDisabled = this.getAttribute('disabled');
@@ -102,7 +107,6 @@ export default class Element {
             let isInDom = !!this._element();
 
             while (!isInDom) {
-
                 await new Promise((resolve) => setTimeout(resolve, 10));
 
                 isInDom = !!this._element();
@@ -115,7 +119,6 @@ export default class Element {
             let isInDom = !!this._element();
 
             while (isInDom) {
-
                 await new Promise((resolve) => setTimeout(resolve, 10));
 
                 isInDom = !!this._element();
@@ -123,4 +126,3 @@ export default class Element {
         });
     }
 }
-

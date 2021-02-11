@@ -76,10 +76,8 @@ document.body.style.width = `${window.WINDOW_WIDTH}px`;
 
 if (!document.hasOwnProperty('createRange')) {
     document.createRange = () => ({
-        setStart: () => {
-        },
-        setEnd: () => {
-        },
+        setStart: () => {},
+        setEnd: () => {},
         //@ts-ignore
         commonAncestorContainer: {
             nodeName: 'BODY',
@@ -96,7 +94,6 @@ Object.defineProperty(window.Element.prototype, 'innerText', {
 });
 
 window.navigator.msSaveBlob = (blob: any, fileName: string) => {
-
     fs.writeFileSync(
         `${path.resolve(process.cwd(), './tmp')}/${fileName}`,
         blob
@@ -106,9 +103,10 @@ window.navigator.msSaveBlob = (blob: any, fileName: string) => {
 };
 
 window.navigator.msSaveOrOpenBlob = (blob: any, fileName: string) => {
-
     fs.writeFileSync(
-        path.normalize(path.join(`${path.resolve(process.cwd(), './tmp')}`,fileName)),
+        path.normalize(
+            path.join(`${path.resolve(process.cwd(), './tmp')}`, fileName)
+        ),
         blob
     );
 

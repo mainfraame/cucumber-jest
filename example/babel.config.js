@@ -1,11 +1,8 @@
 module.exports = function (api) {
-
     api.cache(false);
 
     return {
-        ignore: [
-            /node_modules/
-        ],
+        ignore: [/node_modules/],
         plugins: [
             'lodash',
             [
@@ -13,7 +10,7 @@ module.exports = function (api) {
                 {
                     isTSX: true
                 }
-            ],
+            ]
         ],
         presets: [
             [

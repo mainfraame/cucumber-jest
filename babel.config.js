@@ -1,7 +1,5 @@
 module.exports = {
-    ignore: [
-        /node_modules/
-    ],
+    ignore: [/node_modules/],
     plugins: [
         [
             '@babel/plugin-transform-typescript',
