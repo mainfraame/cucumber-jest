@@ -2,3 +2,5 @@ node_modules
 dist
 *.tgz
 .idea
+package-lock.json
+example/package-lock.json
