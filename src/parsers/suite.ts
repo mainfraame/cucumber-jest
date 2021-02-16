@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
+import TestCaseHookDefinition from '@cucumber/cucumber/lib/models/test_step_hook_definition';
 import generateMessages from '@cucumber/gherkin/dist/src/stream/generateMessages';
+import {messages} from '@cucumber/messages';
 import {uuid} from '@cucumber/messages/dist/src/IdGenerator';
 
 import * as env from '../configs/env';
@@ -10,12 +12,22 @@ import {parseSteps} from './steps';
 import {generateExampleTableSteps, parseExampleTable} from './table';
 import {matchesTags} from './tags';
 
+interface Spec {
+    document: messages.GherkinDocument.IFeature;
+    afterEach: TestCaseHookDefinition[];
+    afterAll: TestCaseHookDefinition[];
+    beforeEach: TestCaseHookDefinition[];
+    beforeAll: TestCaseHookDefinition[];
+    skip: Boolean;
+    suites: any;
+}
+
 export function parseSuite(
     cwd,
     feature: string,
     extensions: string[],
     cucumberSupportCode: any
-) {
+): Spec {
     const featurePath = parseFeature(cwd, feature, extensions);
 
     const source = fs.readFileSync(featurePath, 'utf8');
