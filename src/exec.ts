@@ -1,11 +1,11 @@
 import path from 'path';
 
-import {default as supportCodeLibraryBuilder} from 'cucumber/lib/support_code_library_builder';
+import supportCodeLibraryBuilder from '@cucumber/cucumber/lib/support_code_library_builder';
 
 import {parseSuite} from './parsers/suite';
 import {getMocks} from './utils/getMocks';
 
-supportCodeLibraryBuilder.finalize();
+const options = supportCodeLibraryBuilder.finalize();
 
 export function exec(
     cwd: string,
@@ -34,12 +34,7 @@ export function exec(
 
     // parse the feature file with given cucumber steps / hooks
     // generating a jasmine-like structure
-    const spec = parseSuite(
-        cwd,
-        featurePath,
-        moduleFileExtensions,
-        supportCodeLibraryBuilder.options
-    );
+    const spec = parseSuite(cwd, featurePath, moduleFileExtensions, options);
 
     const fileName = path.basename(featurePath, path.extname(featurePath));
 
@@ -53,7 +48,7 @@ export function exec(
         let world;
 
         beforeAll(async () => {
-            world = new supportCodeLibraryBuilder.options.World({});
+            world = new options.World({});
 
             for (let i = 0; i < spec.beforeAll.length; i++) {
                 await act(async () => {

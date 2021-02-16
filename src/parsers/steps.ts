@@ -1,5 +1,5 @@
+import DataTable from '@cucumber/cucumber/lib/models/data_table';
 import chalk from 'chalk';
-import DataTable from 'cucumber/lib/models/data_table';
 
 import {space} from '../configs/space';
 import {isJson} from '../utils/isJson';

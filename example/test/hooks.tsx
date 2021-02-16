@@ -1,4 +1,4 @@
-import {After, AfterAll, BeforeAll} from 'cucumber';
+import {After, AfterAll, BeforeAll} from '@cucumber/cucumber';
 import {advanceTo, clear} from 'jest-date-mock';
 import React from 'react';
 import ReactDOM from 'react-dom';

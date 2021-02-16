@@ -1,6 +1,6 @@
 import './world';
 
-import {Given, Then, When} from 'cucumber';
+import {Given, Then, When} from '@cucumber/cucumber';
 
 import {TestWorld} from './world';
 
