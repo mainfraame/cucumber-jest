@@ -1,8 +1,6 @@
-import './world';
-
 import {Given, Then, When} from '@cucumber/cucumber';
 
-import {TestWorld} from './world';
+import type {TestWorld} from './world';
 
 Given(/^the (\S+) component rendered$/, async function (this: TestWorld, name) {
     await this[name].click();

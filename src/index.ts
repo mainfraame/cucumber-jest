@@ -4,6 +4,8 @@ import {transform} from '@babel/core';
 import type {Config} from '@jest/types';
 import jestPreset from 'babel-preset-jest';
 
+export type {Spec} from './parsers/suite';
+
 export default {
     canInstrument: false,
     getCacheKey: (fileData, filename, configString, {instrument}) =>
@@ -26,15 +28,9 @@ export default {
     ) {
         const extensions = JSON.stringify(jestConfig.moduleFileExtensions);
 
-        const restoreMocks = (!!jestConfig.restoreMocks).toString();
-
-        const keepMocks = JSON.stringify(
-            process.env.KEEP_MOCKS ? JSON.parse(process.env.KEEP_MOCKS) : []
-        );
-
         const testFile = `
             const exec = require('cucumber-jest/dist/exec').exec;            
-            exec('${jestConfig.cwd}', '${filePath}', ${extensions}, ${restoreMocks}, ${keepMocks})
+            exec('${jestConfig.cwd}', '${filePath}', ${extensions})
         `;
 
         const featureFile = transform(testFile, {

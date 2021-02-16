@@ -12,7 +12,7 @@ import {parseSteps} from './steps';
 import {generateExampleTableSteps, parseExampleTable} from './table';
 import {matchesTags} from './tags';
 
-interface Spec {
+export interface Spec {
     document: messages.GherkinDocument.IFeature;
     afterEach: TestCaseHookDefinition[];
     afterAll: TestCaseHookDefinition[];

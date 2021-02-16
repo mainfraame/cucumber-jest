@@ -1,6 +1,6 @@
 {
     "name": "cucumber-jest",
-    "version": "0.1.4",
+    "version": "0.2.0",
     "description": "a jest transformer for executing cucumber tests in jest",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -37,12 +37,12 @@
     "dependencies": {
         "@cucumber/cucumber": "^7.0.0",
         "@cucumber/gherkin": "11.0.0",
-        "ascii-table": "0.0.9",
+        "ascii-table": "~0.0.9",
         "babel-preset-jest": ">=26.0.0",
-        "chalk": "^4.1.0",
+        "chalk": "^4.0.0",
         "escape-string-regexp": "^4.0.0",
-        "fast-glob": "^3.2.4",
-        "flatten-anything": "^2.0.4",
+        "fast-glob": "~3.2.4",
+        "flatten-anything": "~2.0.4",
         "jest": ">=26.0.1",
         "react-dom": ">=16.9.0"
     },

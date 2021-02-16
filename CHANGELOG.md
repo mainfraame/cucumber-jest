@@ -2,44 +2,72 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
+to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.2.0] - 2021-02-16
+
+### Changes
+
+-   **[BREAKING]** upgraded [cucumber](https://github.com/cucumber/cucumber-js) to version
+    7.0.0 [7028559](https://github.com/mainfraame/cucumber-jest/commit/7028559b4fd6391a0f60fdd7dfd9a0fd0508d76b)
+    ```typescript
+    import {
+        After,
+        AfterAll,
+        Before,
+        BeforeAll,
+        Given,
+        Then,
+        When,
+        setWorldConstructor
+    } from '@cucumber/cucumber';// <-- version 7.0.0
+    // from 'cucumber';            <-- version 6.0.0
+    ```
+-   loosened package dependency version restrictions
+-   removed unused/broken logic for "un-mocking" manual mocks
 
 ## [0.1.3] - 2021-02-11
 
 ### Changes
 
-- fixed regression with node v10 fix
+-   fixed regression with node v10 fix
 
 ## [0.1.2] - 2021-02-11
 
 ### Changes
 
-- added support for node v10 [3fca142](https://github.com/mainfraame/cucumber-jest/commit/3fca142678131e871ee2422a150735c466d3acc3)
-- added prettier, import sort, and husky to standardize code style on pre-commit [ac7128e](https://github.com/mainfraame/cucumber-jest/commit/ac7128e7e6bdc4c1d9059cf44cef22199d44820e)
-- refactored structure of project [ba4c840](https://github.com/mainfraame/cucumber-jest/commit/ba4c840ce6f4e477b5d2501ced061b8033ebe13d)
-- updated example project to support node v10 [ba4c840](https://github.com/mainfraame/cucumber-jest/commit/ba4c840ce6f4e477b5d2501ced061b8033ebe13d)
+-   added support for node
+    v10 [3fca142](https://github.com/mainfraame/cucumber-jest/commit/3fca142678131e871ee2422a150735c466d3acc3)
+-   added prettier, import sort, and husky to standardize code style on
+    pre-commit [ac7128e](https://github.com/mainfraame/cucumber-jest/commit/ac7128e7e6bdc4c1d9059cf44cef22199d44820e)
+-   refactored structure of
+    project [ba4c840](https://github.com/mainfraame/cucumber-jest/commit/ba4c840ce6f4e477b5d2501ced061b8033ebe13d)
+-   updated example project to support node
+    v10 [ba4c840](https://github.com/mainfraame/cucumber-jest/commit/ba4c840ce6f4e477b5d2501ced061b8033ebe13d)
 
 ### Notes
 
-- if you had a previous version installed and are having issues running this version, run jest clearCache:
-```$(npm bin)/jest --clearCache```
+-   if you had a previous version installed and are having issues running this version, run jest clearCache:
+    `$(npm bin)/jest --clearCache`
 
 ## [0.1.1] - 2021-02-06
 
 ### Changes
 
-- corrected typo referring to jest-cucumber, a different package in README [c172252](https://github.com/mainfraame/cucumber-jest/pull/2/commits/c1722520916c568f379e84405bea7805bbf8d5b5)
-- updated parseFeature to work with cucumber-expressions [c14f97c](https://github.com/mainfraame/cucumber-jest/pull/2/commits/c14f97c8d6039daf6ae908e16f6f6a400beae3ac)
+-   corrected typo referring to jest-cucumber, a different package in
+    README [c172252](https://github.com/mainfraame/cucumber-jest/pull/2/commits/c1722520916c568f379e84405bea7805bbf8d5b5)
+-   updated parseFeature to work with
+    cucumber-expressions [c14f97c](https://github.com/mainfraame/cucumber-jest/pull/2/commits/c14f97c8d6039daf6ae908e16f6f6a400beae3ac)
 
 ## [0.1.0] - 2021-01-31
 
 ### Added
 
-- support for pathing on windows
-- feature level (only) ***experimental*** tags support
-- built in ***experimental*** tags: @skip, @debug
+-   support for pathing on windows
+-   feature level (only) **_experimental_** tags support
+-   built in **_experimental_** tags: @skip, @debug
 
 ### Changes
 
-- added documentation for tags
+-   added documentation for tags

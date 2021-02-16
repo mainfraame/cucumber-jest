@@ -3,34 +3,18 @@ import path from 'path';
 import supportCodeLibraryBuilder from '@cucumber/cucumber/lib/support_code_library_builder';
 
 import {parseSuite} from './parsers/suite';
-import {getMocks} from './utils/getMocks';
 
 const options = supportCodeLibraryBuilder.finalize();
 
 export function exec(
     cwd: string,
     featurePath: string,
-    moduleFileExtensions: string[],
-    restoreMocks: boolean | string,
-    keepMocks?: string[]
+    moduleFileExtensions: string[]
 ) {
     const act =
         typeof global['window'] === 'undefined'
             ? async (fn) => await fn()
             : require('react-dom/test-utils').act;
-
-    // if projectConfig.restoreMocks, get all the __mock__ based mocks and remove them
-    if (
-        typeof restoreMocks === 'string'
-            ? restoreMocks === 'true'
-            : restoreMocks
-    ) {
-        getMocks(cwd)
-            .filter((file) => !keepMocks.length || !keepMocks.includes(file))
-            .forEach((file) => {
-                jest.unmock(file);
-            });
-    }
 
     // parse the feature file with given cucumber steps / hooks
     // generating a jasmine-like structure
