@@ -641,10 +641,12 @@ Feature: Sign Up - Scenario Outline [Nested]
 
 ### Examples
 
-| Type                        | Feature File                                                                 | Variable File                                                                                 |
-| --------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Variables **Without** Env   | [scenarioOutline](example/test/features/scenarioOutline.feature)             | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts)                     |
-| Variables **WithEnv** (dev) | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature) | [scenarioOutlineNested.dev.vars.ts](example/test/variables/scenarioOutlineNested.dev.vars.ts) |
+| Type                             | Feature File                                                                                   | Variable File                                                                                 |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Variables **Without** Env        | [scenarioOutline](example/test/features/scenarioOutline.feature)                               | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts)                     |
+| Variables **With** (dev)         | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature)                   | [scenarioOutlineNested.dev.vars.ts](example/test/variables/scenarioOutlineNested.dev.vars.ts) |
+| Global Variables **Without** Env | [scenarioOutlineNestedGlobal](example/test/features/scenarioOutlineNestedGlobal.feature)       | [global.vars.ts](example/test/variables/global.vars.ts)                                       |
+| Global Variables **With** Env    | [scenarioOutlineNestedGlobalEnv](example/test/features/scenarioOutlineNestedGlobalEnv.feature) | [global.vars.dev.ts](example/test/variables/global.vars.dev.ts)                               |
 
 ### Variable File Rules
 

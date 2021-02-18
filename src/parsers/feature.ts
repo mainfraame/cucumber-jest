@@ -30,12 +30,17 @@ export function parseFeature(
             [
                 getPathsPath,
                 cwd,
-                path.join(
-                    '**',
-                    `${path.basename(featurePath, fileExtension)}.${
-                        env.ENV_NAME
-                    }.vars`
-                ),
+                JSON.stringify([
+                    path.join(
+                        '**',
+                        `${path.basename(featurePath, fileExtension)}.${
+                            env.ENV_NAME
+                        }.vars`
+                    ),
+                    ...(env.ENV_NAME
+                        ? [path.join('**', `global.vars.${env.ENV_NAME}`)]
+                        : [])
+                ]),
                 JSON.stringify(varMapExts)
             ],
             {
@@ -43,6 +48,7 @@ export function parseFeature(
             }
         ).stdout
     );
+
     // scan relative directories to find any file that matches the feature file name,
     // but as another extension
     const varMapPaths = JSON.parse(
@@ -51,10 +57,13 @@ export function parseFeature(
             [
                 getPathsPath,
                 cwd,
-                path.join(
-                    '**',
-                    `${path.basename(featurePath, fileExtension)}.vars`
-                ),
+                JSON.stringify([
+                    path.join(
+                        '**',
+                        `${path.basename(featurePath, fileExtension)}.vars`
+                    ),
+                    path.join('**', 'global.vars')
+                ]),
                 JSON.stringify(varMapExts)
             ],
             {
@@ -67,9 +76,9 @@ export function parseFeature(
         return featurePath;
     }
 
-    const varMapLocation = (varMapPaths.length
-        ? varMapPaths
-        : varMapPathsForEnv
+    const varMapLocation = (varMapPathsForEnv.length
+        ? varMapPathsForEnv
+        : varMapPaths
     ).filter((path) => !path.includes('node_modules'))[0];
 
     // load the variable file; use default if it's not a json file

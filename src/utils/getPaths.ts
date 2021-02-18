@@ -5,18 +5,17 @@ import fg from 'fast-glob';
 const params = process.argv.slice(2);
 
 (async () => {
+    const paths = JSON.parse(params[1]);
     const extensions = params[2] ? `{${JSON.parse(params[2]).join(',')}}` : '*';
 
-    const glob = path.normalize(
-        path.join(params[0], `${params[1]}.${extensions}`)
-    );
+    const globs = paths.map((p) => path.join(params[0], `${p}.${extensions}`));
 
-    const paths = await fg([glob], {
+    const files = await fg(globs, {
         cwd: params[0],
         absolute: true
     });
 
-    process.stdout.write(JSON.stringify(paths), () => {
+    process.stdout.write(JSON.stringify(files), () => {
         process.exit();
     });
 })();
