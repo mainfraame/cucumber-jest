@@ -1,21 +1,25 @@
+// we have to use spawnSync because transformers cannot be asynchronous
+
+import {spawnSync} from 'child_process';
 import path from 'path';
 
-import fg from 'fast-glob';
+const getPathsPath = path.normalize(
+    path.resolve(path.join(__dirname, 'getPathsWorker.js'))
+);
 
-const params = process.argv.slice(2);
-
-(async () => {
-    const paths = JSON.parse(params[1]);
-    const extensions = params[2] ? `{${JSON.parse(params[2]).join(',')}}` : '*';
-
-    const globs = paths.map((p) => path.join(params[0], `${p}.${extensions}`));
-
-    const files = await fg(globs, {
-        cwd: params[0],
-        absolute: true
-    });
-
-    process.stdout.write(JSON.stringify(files), () => {
-        process.exit();
-    });
-})();
+export function getPaths(cwd: string, paths: string[], extensions: string[]) {
+    return JSON.parse(
+        spawnSync(
+            'node',
+            [
+                getPathsPath,
+                cwd,
+                JSON.stringify(paths),
+                JSON.stringify(extensions)
+            ],
+            {
+                encoding: 'utf-8'
+            }
+        ).stdout
+    );
+}

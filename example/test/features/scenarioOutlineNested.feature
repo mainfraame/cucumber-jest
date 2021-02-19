@@ -10,7 +10,7 @@ Feature: Sign Up - Scenario Outline [Nested]
     Then POST /api/sign-up is called with the request body:
       """
        {
-           "firstName": "$user.firstName",
+           "firstName": "<firstName>",
            "lastName": "$user.lastName",
            "email": "$user.email",
            "password": "$user.password",
@@ -22,6 +22,6 @@ Feature: Sign Up - Scenario Outline [Nested]
     And the showExtraEmailsAlert is <showExtraEmailsAlert>
 
     Examples:
-      | prefix  | extraEmails | extraEmailsValue | successAlert | showExtraEmailsAlert |
-      | With    | not checked | false            | visible      | not visible          |
-      | Without | checked     | true             | visible      | visible              |
+      | prefix  | firstName       | extraEmails | extraEmailsValue | successAlert | showExtraEmailsAlert |
+      | With    | $user.firstName | not checked | false            | visible      | not visible          |
+      | Without | $user.firstName | checked     | true             | visible      | visible              |

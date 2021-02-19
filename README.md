@@ -63,24 +63,28 @@ You'll need to add the following to your jest config:
 ```json
 {
     "moduleFileExtensions": [
-        "feature", // <--- *1
+        "feature",
+        // <--- *1
         "js",
         "json",
         "ts",
         "tsx"
     ],
     "setupFilesAfterEnv": [
-        "<rootDir>/node_modules/cucumber-jest/dist/init.js", // <--- *2
+        "<rootDir>/node_modules/cucumber-jest/dist/init.js",
+        // <--- *2
         "<rootDir>/path/to/your/world.ts",
         "<rootDir>/path/to/your/hooks.tsx",
         "<rootDir>/path/to/your/steps.ts"
     ],
     "transform": {
         "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
-        "^.+\\.(feature)$": "cucumber-jest" // <--- *3
+        "^.+\\.(feature)$": "cucumber-jest"
+        // <--- *3
     },
     "testMatch": [
-        "<rootDir>/path/to/your/*.feature" // <--- *4
+        "<rootDir>/path/to/your/*.feature"
+        // <--- *4
     ]
 }
 ```
@@ -106,10 +110,10 @@ This can be helpful when you want to maintain state, access _globals_, or assign
 are accessible within all Hooks and Steps.
 
 ```typescript
-import {setWorldConstructor}  from '@cucumber/cucumber';
+import { setWorldConstructor } from '@cucumber/cucumber';
 
 import Element from './element';
-import {$server, $spy} from './mocks';
+import { $server, $spy } from './mocks';
 
 /**
  *  Element class is a helper provided in the example project
@@ -138,23 +142,24 @@ setWorldConstructor(
 
 ## Hooks
 
-\*Unlike cucumber.js, _"this"_ is accessible inside **_BeforeAll_** and **_AfterAll_** hooks,
-and they receive two additional parameters: [Spec](https://github.com/mainfraame/cucumber-jest/blob/master/src/parsers/suite.ts#L15) and the **fileName**
+\*Unlike cucumber.js, _"this"_ is accessible inside **_BeforeAll_** and **_AfterAll_** hooks, and they receive two
+additional parameters: [Spec](https://github.com/mainfraame/cucumber-jest/blob/master/src/parsers/suite.ts#L15) and
+the **fileName**
 
-If you are using these two params with **typescript**, you'll notice that it shows a typing error.
-The library does not currently augment cucumber's **hook** typings to add the two **additional params**;
-if anyone has a solution, please contribute.
+If you are using these two params with **typescript**, you'll notice that it shows a typing error. The library does not
+currently augment cucumber's **hook** typings to add the two **additional params**; if anyone has a solution, please
+contribute.
 
 ```typescript
-import {After, AfterAll, Before, BeforeAll} from '@cucumber/cucumber';
-import {Spec} from 'cucumber-jest';
-import {advanceTo, clear} from 'jest-date-mock';
+import { After, AfterAll, Before, BeforeAll } from '@cucumber/cucumber';
+import { Spec } from 'cucumber-jest';
+import { advanceTo, clear } from 'jest-date-mock';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {act} from 'react-dom/test-utils';
+import { act } from 'react-dom/test-utils';
 
-import {SignUp} from '../src/signUp';
-import {TestWorld} from './world';
+import { SignUp } from '../src/signUp';
+import { TestWorld } from './world';
 
 const $root = document.createElement('div');
 
@@ -169,7 +174,7 @@ BeforeAll(async function (this: TestWorld, spec: Spec, fileName: string) {
     advanceTo(new Date('2019-12-01T15:00:00.000Z'));
 
     act(() => {
-        ReactDOM.render(<SignUp/>, $root);
+        ReactDOM.render(<SignUp / >, $root);
     });
 });
 
@@ -196,9 +201,9 @@ AfterAll(async function (this: TestWorld) {
 ## Steps
 
 ```typescript
-import {Given, Then, When} from '@cucumber/cucumber';
+import { Given, Then, When } from '@cucumber/cucumber';
 
-import type {TestWorld} from './world';
+import type { TestWorld } from './world';
 
 Given(/^the (\S+) component rendered$/,
     async function (this: TestWorld, name) {
@@ -465,8 +470,8 @@ Feature: Sign Up W/ Background & Tags Example
 
 ### Custom
 
-Tags are supported by using the environment variable `TAGS` with a comma
-delimited list of strings. For best results, use the tags only at the `scenario` level. Support for `feature` level will be added later.
+Tags are supported by using the environment variable `TAGS` with a comma delimited list of strings. For best results,
+use the tags only at the `scenario` level. Support for `feature` level will be added later.
 **_Unfortunately_**, jest cli does not support custom commands and will throw an error if you try to use them. For this
 reason, we need to use environment variables to pass these.
 
@@ -496,10 +501,12 @@ TAGS="bar, not foo" jest
 
 You can inject values into your feature files using variables.
 
+When variable files are found and injected into a feature file
+has variables injected, a temporary feature file with the same name is written to the `node_modules/__temp__` folder.
+
 ### Use Without ENV
 
-Set up a file where the name matches the file you're targeting and
-include **.vars** in the name, eg.
+Set up a file where the name matches the file you're targeting and include **.vars** in the name, eg.
 
 | Feature File            | Variable File                 |
 | ----------------------- | ----------------------------- |
@@ -516,12 +523,12 @@ Below are multiple examples with different ENV values and extensions:
 
 | Environment Variable | Feature File            | Variable File                     |
 | -------------------- | ----------------------- | --------------------------------- |
-| ENV=**dev**          | scenarioOutline.feature | scenarioOutline.**dev**.vars.js   |
-| ENV=**dev**          | scenarioOutline.feature | scenarioOutline.**dev**.vars.json |
-| ENV=**dev**          | scenarioOutline.feature | scenarioOutline.**dev**.vars.ts   |
-| ENV=**qa**           | scenarioOutline.feature | scenarioOutline.**qa**.vars.js    |
-| ENV=**qa**           | scenarioOutline.feature | scenarioOutline.**qa**.vars.json  |
-| ENV=**qa**           | scenarioOutline.feature | scenarioOutline.**qa**.vars.ts    |
+| ENV=**dev**          | scenarioOutline.feature | scenarioOutline.vars.**dev**.js   |
+| ENV=**dev**          | scenarioOutline.feature | scenarioOutline.vars.**dev**.json |
+| ENV=**dev**          | scenarioOutline.feature | scenarioOutline.vars.**dev**.ts   |
+| ENV=**qa**           | scenarioOutline.feature | scenarioOutline.vars.**qa**.js    |
+| ENV=**qa**           | scenarioOutline.feature | scenarioOutline.vars.**qa**.json  |
+| ENV=**qa**           | scenarioOutline.feature | scenarioOutline.vars.**qa**.ts    |
 
 ### Example Variable Use
 
@@ -541,7 +548,7 @@ Properties in your variable files can be used in your feature file by prefixing 
 ENV=dev $(npm bin)/jest
 ```
 
-#### Variables File: `scenarioOutline.dev.vars.ts`
+#### Variables File: `scenarioOutline.vars.dev.ts`
 
 ```typescript
 export default {
@@ -592,7 +599,7 @@ Feature: Sign Up
 ENV=qa $(npm bin)/jest
 ```
 
-#### Variables File: `scenarioOutline.qa.vars.ts`
+#### Variables File: `scenarioOutline.vars.qa.ts`
 
 ```typescript
 export default {
@@ -641,18 +648,24 @@ Feature: Sign Up - Scenario Outline [Nested]
 
 ### Examples
 
-| Type                             | Feature File                                                                                   | Variable File                                                                                 |
-| -------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Variables **Without** Env        | [scenarioOutline](example/test/features/scenarioOutline.feature)                               | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts)                     |
-| Variables **With** (dev)         | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature)                   | [scenarioOutlineNested.dev.vars.ts](example/test/variables/scenarioOutlineNested.dev.vars.ts) |
-| Global Variables **Without** Env | [scenarioOutlineNestedGlobal](example/test/features/scenarioOutlineNestedGlobal.feature)       | [global.vars.ts](example/test/variables/global.vars.ts)                                       |
-| Global Variables **With** Env    | [scenarioOutlineNestedGlobalEnv](example/test/features/scenarioOutlineNestedGlobalEnv.feature) | [global.vars.dev.ts](example/test/variables/global.vars.dev.ts)                               |
+| Type | Feature File | Variable File |
+| ---- | ------------ | ------------- |
+| Global Variables **Without** Env | [scenarioOutlineNestedGlobal](example/test/features/scenarioOutlineNestedGlobal.feature) | [global.vars.ts](example/test/variables/global.vars.ts) |
+| Variables **Without** Env | [scenarioOutline](example/test/features/scenarioOutline.feature) | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts) |
+| Global Variables **With** Env | [scenarioOutlineNestedGlobalEnv](example/test/features/scenarioOutlineNestedGlobalEnv.feature) | [global.vars.dev.ts](example/test/variables/global.vars.dev.ts) |
+| Variables **With** (dev) | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature) | [scenarioOutlineNested.vars.dev.ts](example/test/variables/scenarioOutlineNested.vars.dev.ts) |
 
 ### Variable File Rules
 
 -   must be located within your project
 -   uses an extension defined in your jest configuration: [**moduleFileExtensions**](https://jestjs.io/docs/en/configuration#modulefileextensions-arraystring)
 -   can be parsed into a javascript object, eg. .js, .json, .ts
+-   global files, as the name implies, can be used in any feature file
+-   when providing an env, it will prioritize files with an env over those that do not. eg, ENV=dev = feature.vars.dev >
+    feature.vars
+-   global and feature specific variable files will get merged together into a single object.
+-   when global and feature specific variable files have the same variable paths, the feature specific values will be
+    prioritized.
 
 ## Cucumber Docs
 
@@ -663,7 +676,8 @@ Here are some useful links to the cucumber-js docs:
 -   [before](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#beforeoptions-fn)
 -   [beforeAll](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#beforealloptions-fn)
 -   [beforeAll / afterAll example](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/hooks.md#beforeall--afterall)
--   [defineStep](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#definesteppattern-options-fn), aka Given/When/Then (aliases)
+-   [defineStep](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/api_reference.md#definesteppattern-options-fn)
+    , aka Given/When/Then (aliases)
 -   [data tables](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/data_table_interface.md)
 -   [expressions](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/step_definitions.md#cucumber-expressions)
 -   [Hooks](https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/hooks.md)

@@ -1,5 +1,6 @@
 import DataTable from '@cucumber/cucumber/lib/models/data_table';
 import chalk from 'chalk';
+import {outdent} from 'outdent';
 
 import {space} from '../configs/space';
 import {isJson} from '../utils/isJson';
@@ -17,13 +18,12 @@ export function parseSteps(steps, definitions) {
             });
 
             if (!definition) {
-                throw new Error(
-                    `\n${chalk.red(
-                        'Error:'
-                    )}\nCould not find a step with pattern that matches the text:\n${chalk.yellow(
-                        step.text
-                    )}\n`
-                );
+                throw new Error(outdent`
+                    ${chalk.red(
+                        '[error]'
+                    )} could not find a step with pattern that matches the text:\n
+                    ${chalk.yellow(step.text)}\n
+                `);
             }
 
             if (multiSteps.length > 1) {

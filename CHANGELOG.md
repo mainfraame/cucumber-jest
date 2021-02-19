@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2021-02-19
+
+### Added
+
+-   added error handling and error message formatting when a feature file fails to parse (error from cucumber)
+-   prioritizing variable files based on ENV
+-   merging global and feature variable files; prioritizing values of feature variables over global variables (if matching)
+
+### Changes
+
+-   fixed variables regexp to account for exact matches, double quote wrapping and escaping pipe characters when in a data table,
+-   made global and feature specific variable files follow the same naming convention; eg. {global/feature}.vars.**{env}**.{ext}
+-   updated README with convention change and included path of temporary folder for feature files with variables
+
 ## [0.2.1] - 2021-02-18
 
 ### Added

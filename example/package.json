@@ -4,6 +4,7 @@
     "description": "a basic example of using cucumber-jest",
     "scripts": {
         "test": "ENV=dev jest --verbose --logHeapUsage",
+        "test2": "ENV=dev jest --verbose --logHeapUsage --runTestsByPath test/features/scenarioOutlineNested.feature",
         "test:tags:single": "ENV=dev TAGS=withExtraEmails jest --verbose --logHeapUsage",
         "test:tags:multiple": "ENV=dev TAGS=withExtraEmails,withoutExtraEmails jest --verbose --logHeapUsage",
         "test:tags:not:single": "ENV=dev TAGS=\"not withExtraEmails\" jest --verbose --logHeapUsage",
@@ -40,7 +41,7 @@
         "@types/react": "^16.9.32",
         "@types/react-dom": "^16.9.6",
         "babel-plugin-lodash": "^3.3.4",
-        "cucumber-jest": "0.2.1",
+        "cucumber-jest": "0.2.2",
         "deep-clean": "^1.0.2",
         "jest-date-mock": "^1.0.8",
         "msw": "^0.24.1",

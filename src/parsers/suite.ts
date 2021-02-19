@@ -5,8 +5,10 @@ import TestCaseHookDefinition from '@cucumber/cucumber/lib/models/test_step_hook
 import generateMessages from '@cucumber/gherkin/dist/src/stream/generateMessages';
 import {messages} from '@cucumber/messages';
 import {uuid} from '@cucumber/messages/dist/src/IdGenerator';
+import chalk from 'chalk';
+import outdent from 'outdent';
 
-import * as env from '../configs/env';
+import env from '../configs/env';
 import {parseFeature} from './feature';
 import {parseSteps} from './steps';
 import {generateExampleTableSteps, parseExampleTable} from './table';
@@ -42,6 +44,27 @@ export function parseSuite(
             newId: uuid()
         }
     );
+
+    if (!events[0]?.gherkinDocument?.feature) {
+        // feature is not defined if an error occurs while parsing
+        // and the error is added as an attachment
+        const attachment = events[0]?.attachment;
+
+        throw new Error(outdent`
+            ${chalk.red('[error]')} failed to parse feature file:\n
+            file: ${chalk.yellow(featurePath)}
+            ${
+                attachment
+                    ? [
+                          `column: ${attachment.source.location.column}`,
+                          `line: ${attachment.source.location.line}`,
+                          `message: ${attachment.text}`
+                      ].join('\n')
+                    : ''
+            }
+            \n
+        `);
+    }
 
     const document = events[0].gherkinDocument.feature;
     const hasBackground = !!document.children[0].background;

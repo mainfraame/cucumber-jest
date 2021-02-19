@@ -1,4 +1,4 @@
-import * as env from '../configs/env';
+import env from '../configs/env';
 
 export function matchesTags(tagRaw) {
     const tag = tagRaw.replace('@', '');

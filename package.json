@@ -1,6 +1,6 @@
 {
     "name": "cucumber-jest",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "a jest transformer for executing cucumber tests in jest",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -44,6 +44,8 @@
         "fast-glob": "~3.2.4",
         "flatten-anything": "~2.0.4",
         "jest": ">=26.0.1",
+        "merge-deep": "^3.0.3",
+        "outdent": "^0.8.0",
         "react-dom": ">=16.9.0"
     },
     "devDependencies": {
