@@ -1,4 +1,5 @@
 import AsciiTable from 'ascii-table';
+import {map, reduce} from 'inline-loops.macro';
 
 import {space} from '../configs/space';
 
@@ -11,34 +12,31 @@ export function createDataTable(rows) {
         table.addRow(...rows[i]);
     }
 
-    return table
-        .toString()
-        .split('\n')
-        .map((row) => space + row)
-        .join('\n');
+    return map(table.toString().split('\n'), (row) => space + row).join('\n');
 }
 
 export function generateExampleTableSteps(examples, scenario) {
-    return examples.reduce(
+    return reduce(
+        examples,
         (acc, example) => [
             ...acc,
             {
                 ...scenario,
-                name: parseGherkinVariables(example, scenario.name),
-                steps: scenario.steps.map((step) => ({
+                name: parseVariables(example, scenario.name),
+                steps: map(scenario.steps, (step) => ({
                     ...step,
                     ...(step.docString
                         ? {
                               docString: {
                                   ...step.docString,
-                                  content: parseGherkinVariables(
+                                  content: parseVariables(
                                       example,
                                       step.docString.content
                                   )
                               }
                           }
                         : {}),
-                    text: parseGherkinVariables(example, step.text)
+                    text: parseVariables(example, step.text)
                 }))
             }
         ],
@@ -47,36 +45,51 @@ export function generateExampleTableSteps(examples, scenario) {
 }
 
 export function parseExampleTable(examples) {
-    return (examples || []).reduce((acc, example) => {
-        const keys = example.tableHeader.cells.reduce(
-            (acc, cell) => [...acc, cell.value],
-            []
-        );
-
-        return [
-            ...acc,
-            ...example.tableBody.reduce(
-                (acc, row) => [
-                    ...acc,
-                    keys.reduce(
-                        (acc, key, i) => [
-                            ...acc,
-                            {
-                                key,
-                                value: row.cells[i].value
-                            }
-                        ],
-                        []
-                    )
-                ],
+    return reduce(
+        examples || [],
+        (acc, example) => {
+            const keys = reduce(
+                example.tableHeader.cells,
+                (acc, cell) => [...acc, cell.value],
                 []
-            )
-        ];
-    }, []);
+            );
+
+            return [
+                ...acc,
+                ...reduce(
+                    example.tableBody,
+                    (acc, row) => [
+                        ...acc,
+                        parseExampleTableKeyAndValues(keys, row)
+                    ],
+                    []
+                )
+            ];
+        },
+        []
+    );
 }
 
-export function parseGherkinVariables(example, text) {
-    return example.reduce((acc, variable) => {
-        return acc.replace(new RegExp(`<${variable.key}>`), variable.value);
-    }, text + '');
+function parseExampleTableKeyAndValues(keys, row) {
+    return reduce(
+        keys,
+        (acc, key, i) => [
+            ...acc,
+            {
+                key,
+                value: row.cells[i].value
+            }
+        ],
+        []
+    );
+}
+
+export function parseVariables(example, text) {
+    return reduce(
+        example,
+        (acc, variable) => {
+            return acc.replace(new RegExp(`<${variable.key}>`), variable.value);
+        },
+        text + ''
+    );
 }

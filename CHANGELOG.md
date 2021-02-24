@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2021-02-24
+
+### Added
+
+-   added `babel-macros-plugin`
+-   environment variable to have cucumber-jest print out the path to the temp directory `CUCUMBER_JEST_SHOW_TEMP_PATH`
+
+### Changes
+
+-   refactored glob patterns used for getting variable file paths **[PERFORMANCE](https://github.com/mainfraame/cucumber-jest/issues/10)**
+-   replaced prototyped methods (filter, find, map, reduce, etc.) with `inline-loops.macro` **[PERFORMANCE](https://github.com/mainfraame/cucumber-jest/issues/10)**
+
 ## [0.2.2] - 2021-02-19
 
 ### Added

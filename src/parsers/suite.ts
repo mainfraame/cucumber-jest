@@ -6,6 +6,7 @@ import generateMessages from '@cucumber/gherkin/dist/src/stream/generateMessages
 import {messages} from '@cucumber/messages';
 import {uuid} from '@cucumber/messages/dist/src/IdGenerator';
 import chalk from 'chalk';
+import {map, reduce, some} from 'inline-loops.macro';
 import outdent from 'outdent';
 
 import env from '../configs/env';
@@ -56,9 +57,9 @@ export function parseSuite(
             ${
                 attachment
                     ? [
+                          `message: ${attachment.text}`,
                           `column: ${attachment.source.location.column}`,
-                          `line: ${attachment.source.location.line}`,
-                          `message: ${attachment.text}`
+                          `line: ${attachment.source.location.line}`
                       ].join('\n')
                     : ''
             }
@@ -75,12 +76,13 @@ export function parseSuite(
     const hasExcludeTags = env.EXCLUDE_TAGS.length > 0;
     const hasTags = env.TAGS.length > 0;
 
-    const documentTags = document.tags.map(({name}) => name);
+    const documentTags = map(document.tags, ({name}) => name);
     const documentHasTags =
         documentTags.length > 0 && documentTags.some(matchesTags);
     const shouldSkipFeature = documentTags.includes('@skip');
 
-    const documentContainsSpecsWithTags = specs.some(
+    const documentContainsSpecsWithTags = some(
+        specs,
         (spec) =>
             spec.scenario.tags.length &&
             spec.scenario.tags.some(({name}) => matchesTags(name))
@@ -93,37 +95,41 @@ export function parseSuite(
 
     const documentHasDebugTag = scenarioTags.includes('@debug');
 
-    const scenarios = specs.reduce((acc, spec) => {
-        const tags = spec.scenario.tags.map(({name}) => name);
+    const scenarios = reduce(
+        specs,
+        (acc, spec) => {
+            const tags = spec.scenario.tags.map(({name}) => name);
 
-        const examples = parseExampleTable(spec.scenario.examples);
+            const examples = parseExampleTable(spec.scenario.examples);
 
-        const shouldSkipForDebug =
-            documentHasDebugTag && !tags.includes('@debug');
+            const shouldSkipForDebug =
+                documentHasDebugTag && !tags.includes('@debug');
 
-        const skip =
-            shouldSkipForDebug ||
-            tags.includes('@skip') ||
-            (hasTags && !!tags.length && !tags.some(matchesTags));
+            const skip =
+                shouldSkipForDebug ||
+                tags.includes('@skip') ||
+                (hasTags && !!tags.length && !tags.some(matchesTags));
 
-        return [
-            ...acc,
-            ...(examples.length
-                ? generateExampleTableSteps(examples, spec.scenario).map(
-                      (spec) => ({
-                          ...spec,
-                          skip
-                      })
-                  )
-                : [
-                      {
-                          ...spec.scenario,
-                          skip,
-                          steps: spec.scenario.steps
-                      }
-                  ])
-        ];
-    }, []);
+            return [
+                ...acc,
+                ...(examples.length
+                    ? generateExampleTableSteps(examples, spec.scenario).map(
+                          (spec) => ({
+                              ...spec,
+                              skip
+                          })
+                      )
+                    : [
+                          {
+                              ...spec.scenario,
+                              skip,
+                              steps: spec.scenario.steps
+                          }
+                      ])
+            ];
+        },
+        []
+    );
 
     const skipFeature =
         shouldSkipFeature ||
@@ -133,7 +139,7 @@ export function parseSuite(
             !hasExcludeTags) ||
         scenarios.length === 0;
 
-    const suites = scenarios.map((scenario) => ({
+    const suites = map(scenarios, (scenario) => ({
         ...scenario,
         path: featurePath,
         steps: [
@@ -149,7 +155,7 @@ export function parseSuite(
         beforeEach: cucumberSupportCode.beforeTestCaseHookDefinitions,
         beforeAll: cucumberSupportCode.beforeTestRunHookDefinitions,
         skip: skipFeature,
-        suites: suites.map((suite) => ({
+        suites: map(suites, (suite) => ({
             ...suite,
             steps: parseSteps(suite.steps, cucumberSupportCode.stepDefinitions)
         }))

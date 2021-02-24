@@ -1,8 +1,8 @@
 export default {
     user: {
-        email: 'james.dean@gmail.com',
-        firstName: 'James|',
-        lastName: 'Dean',
-        password: 'itsASecretShh...'
+        email: 'booker.t.washington@gmail.com',
+        firstName: 'Booker',
+        lastName: 'Washington',
+        password: 'mostPeopleKnowMyNameButNotWhatIamFamousFor'
     }
 };

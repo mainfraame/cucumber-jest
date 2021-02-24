@@ -1,12 +1,8 @@
 export default {
     global: {
-        email: 'james.dean@gmail.com',
-        firstName: 'James',
-        lastName: 'Dean',
-        password: 'itsASecretShh...'
-    },
-    email: 'james.dean@gmail.com',
-    firstName: 'James',
-    lastName: 'Dean',
-    password: 'itsASecretShh...'
+        email: 'martin.luther.king@gmail.com',
+        firstName: 'Martin',
+        lastName: 'King',
+        password: 'justAPersonByTheContentOfTheirCharacter'
+    }
 };

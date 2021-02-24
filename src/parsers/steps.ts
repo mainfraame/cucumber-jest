@@ -1,5 +1,6 @@
 import DataTable from '@cucumber/cucumber/lib/models/data_table';
 import chalk from 'chalk';
+import {filter, find, reduce} from 'inline-loops.macro';
 import {outdent} from 'outdent';
 
 import {space} from '../configs/space';
@@ -7,13 +8,14 @@ import {isJson} from '../utils/isJson';
 import {createDataTable} from './table';
 
 export function parseSteps(steps, definitions) {
-    return steps.reduce(
+    return reduce(
+        steps,
         (acc, step) => {
-            const definition = definitions.find((def) => {
+            const definition = find(definitions, (def) => {
                 return def.matchesStepName(step.text);
             });
 
-            const multiSteps = definitions.filter((def) => {
+            const multiSteps = filter(definitions, (def) => {
                 return def.matchesStepName(step.text);
             });
 

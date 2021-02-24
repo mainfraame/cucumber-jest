@@ -502,7 +502,10 @@ TAGS="bar, not foo" jest
 You can inject values into your feature files using variables.
 
 When variable files are found and injected into a feature file
-has variables injected, a temporary feature file with the same name is written to the `node_modules/__temp__` folder.
+has variables injected, a temporary feature file with the same name is written to your os's temporary folder;
+eg. for mac users, `/var/folders/sb/2wr3vgcd1sxg4tgv1mr8dtq80000gn/T/cucumber-jest`
+
+If you need to figure out the temporary folder path, run the jest with this environment variable `CUCUMBER_JEST_SHOW_TEMP_PATH=true`.
 
 ### Use Without ENV
 
@@ -648,12 +651,12 @@ Feature: Sign Up - Scenario Outline [Nested]
 
 ### Examples
 
-| Type | Feature File | Variable File |
-| ---- | ------------ | ------------- |
-| Global Variables **Without** Env | [scenarioOutlineNestedGlobal](example/test/features/scenarioOutlineNestedGlobal.feature) | [global.vars.ts](example/test/variables/global.vars.ts) |
-| Variables **Without** Env | [scenarioOutline](example/test/features/scenarioOutline.feature) | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts) |
-| Global Variables **With** Env | [scenarioOutlineNestedGlobalEnv](example/test/features/scenarioOutlineNestedGlobalEnv.feature) | [global.vars.dev.ts](example/test/variables/global.vars.dev.ts) |
-| Variables **With** (dev) | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature) | [scenarioOutlineNested.vars.dev.ts](example/test/variables/scenarioOutlineNested.vars.dev.ts) |
+| Type                             | Feature File                                                                                   | Variable File                                                                                 |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Global Variables **Without** Env | [scenarioOutlineNestedGlobal](example/test/features/scenarioOutlineNestedGlobal.feature)       | [global.vars.ts](example/test/variables/global.vars.ts)                                       |
+| Variables **Without** Env        | [scenarioOutline](example/test/features/scenarioOutline.feature)                               | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts)                     |
+| Global Variables **With** Env    | [scenarioOutlineNestedGlobalEnv](example/test/features/scenarioOutlineNestedGlobalEnv.feature) | [global.vars.dev.ts](example/test/variables/global.vars.dev.ts)                               |
+| Variables **With** (dev)         | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature)                   | [scenarioOutlineNested.vars.dev.ts](example/test/variables/scenarioOutlineNested.vars.dev.ts) |
 
 ### Variable File Rules
 

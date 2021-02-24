@@ -7,7 +7,8 @@ module.exports = {
                 isTSX: true
             }
         ],
-        'babel-plugin-add-module-exports'
+        'babel-plugin-add-module-exports',
+        'babel-plugin-macros'
     ],
     presets: [
         [
