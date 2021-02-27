@@ -7,6 +7,20 @@ import {space} from '../configs/space';
 import {isJson} from '../utils/isJson';
 import {createDataTable} from './table';
 
+export function generateSnippet(step): string {
+    return outdent`
+        ${chalk.red(
+            '[error]'
+        )} could not find a step with pattern that matches the text:\n		
+        ${chalk.yellow(step.text)}\n
+        Implement with the following snippet:\n
+        ${step.keyword.trim()}("${step.text}", function () {
+            // Write code here
+        });
+        \n
+    `;
+}
+
 export function parseSteps(steps, definitions) {
     return reduce(
         steps,
@@ -20,12 +34,7 @@ export function parseSteps(steps, definitions) {
             });
 
             if (!definition) {
-                throw new Error(outdent`
-                    ${chalk.red(
-                        '[error]'
-                    )} could not find a step with pattern that matches the text:\n
-                    ${chalk.yellow(step.text)}\n
-                `);
+                throw new Error(generateSnippet(step));
             }
 
             if (multiSteps.length > 1) {
