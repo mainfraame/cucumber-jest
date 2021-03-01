@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4] - 2021-03-01
+
+### Added
+
+-   added better error messaging for missing steps that includes a generic implementation snipped [46c4102](https://github.com/mainfraame/cucumber-jest/commit/46c41021fc90587a175317987aad018caa782124)
+
 ## [0.2.3] - 2021-02-24
 
 ### Added
