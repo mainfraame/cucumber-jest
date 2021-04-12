@@ -1,3 +1,5 @@
+import {CucumberExpression} from '@cucumber/cucumber-expressions';
+import CucumberExpressionParser from '@cucumber/cucumber-expressions/dist/src/CucumberExpressionParser';
 import DataTable from '@cucumber/cucumber/lib/models/data_table';
 import chalk from 'chalk';
 import {filter, find, reduce} from 'inline-loops.macro';
@@ -6,6 +8,8 @@ import {outdent} from 'outdent';
 import {space} from '../configs/space';
 import {isJson} from '../utils/isJson';
 import {createDataTable} from './table';
+
+const parser = new CucumberExpressionParser();
 
 export function generateSnippet(step): string {
     return outdent`
@@ -50,9 +54,9 @@ export function parseSteps(steps, definitions) {
             }
 
             const stepArgs = [
-                ...Array.from(
-                    definition.expression?.regexp?.exec(step.text) || []
-                ).slice(1),
+                ...definition.expression
+                    ?.match(step.text)
+                    ?.map((arg) => arg.getValue()),
                 ...(step.dataTable ? [new DataTable(step.dataTable)] : []),
                 ...(step.docString
                     ? [
