@@ -6,6 +6,10 @@ Then('I say {word} and {string} and {string}', function (first, second, third) {
     expect(third).toEqual('string2');
 });
 
+Then('{int} plus {int} should equal {int}', function (num1, num2, sum) {
+    expect(num1 + num2).toEqual(sum);
+});
+
 Then(
     /^I have a regex that should parse (\S+) and (\S+)$/,
     function (first, second) {
