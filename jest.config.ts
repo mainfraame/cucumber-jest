@@ -1,6 +1,7 @@
 export default {
     coverageDirectory: 'coverage',
     coveragePathIgnorePatterns: ['/node_modules/', '/example/', '/test/'],
+    coverageReporters: ['json-summary'],
     moduleDirectories: ['test/example/node_modules', 'node_modules'],
     moduleFileExtensions: ['feature', 'js', 'json', 'ts', 'tsx'],
     setupFiles: [

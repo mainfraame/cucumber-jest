@@ -2,8 +2,7 @@
     "name": "cucumber-jest",
     "version": "0.3.0",
     "description": "a jest transformer for executing cucumber tests in jest",
-    "main": "dist/index.cjs.js",
-    "module": "dist/index.esm.js",
+    "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "engines": {
         "node": ">=10.0.0"
@@ -17,8 +16,8 @@
     "scripts": {
         "build": "./scripts/build.sh",
         "format": "prettier \"{,!(node_modules|dist)/**/}*.{js,json,ts,tsx}\" --loglevel warn -w",
-        "publish:minor": "npm run test && depcheck . && scripts/bump.js --minor && git add . && git commit -m \"minor release commit\" && git push origin master && npm publish --dry-run",
-        "publish:patch": "npm run test && depcheck . && scripts/bump.js --patch && git add . && git commit -m \"patch release commit\" && git push origin master && npm publish --dry-run",
+        "publish:minor": "npm run test && depcheck . && scripts/bump.js --minor && jest-badge-generator && git add . && git commit -m \"minor release commit\" && git push origin master && npm publish",
+        "publish:patch": "npm run test && depcheck . && scripts/bump.js --patch && jest-badge-generator && git add . && git commit -m \"patch release commit\" && git push origin master && npm publish",
         "pretest": "npm run build",
         "start": "npm i && npm run build && cd test/example && npm i",
         "test": "jest --coverage --runInBand"
@@ -77,6 +76,7 @@
         "depcheck": "^1.4.0",
         "husky": "^4.3.8",
         "import-sort-style-module": "^6.0.0",
+        "jest-badge-generator": "^1.1.5",
         "prettier": "^2.2.1",
         "prettier-plugin-import-sort": "^0.0.6",
         "semver": "^7.3.5",

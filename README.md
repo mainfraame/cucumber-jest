@@ -1,6 +1,11 @@
 # cucumber-jest
 
-[![Build Passing](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/Naereen/badges) [![Build Passing](https://img.shields.io/badge/dependencies-up_to_date-green.svg)](https://github.com/Naereen/badges)
+[![Build Passing](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/Naereen/badges) 
+[![Build Passing](https://img.shields.io/badge/dependencies-up_to_date-green.svg)](https://github.com/Naereen/badges)
+[![Branches](.badges/badge-branches.svg)](https://github.com/Naereen/badges)
+[![Functions](.badges/badge-functions.svg)](https://github.com/Naereen/badges)
+[![Lines](.badges/badge-lines.svg)](https://github.com/Naereen/badges)
+[![Statements](.badges/badge-statements.svg)](https://github.com/Naereen/badges)
 
 A transformer for executing cucumber tests in jest
 
