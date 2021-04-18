@@ -1,6 +1,6 @@
 {
     "name": "cucumber-jest",
-    "version": "0.2.5",
+    "version": "0.3.0",
     "description": "a jest transformer for executing cucumber tests in jest",
     "main": "dist/index.cjs.js",
     "module": "dist/index.esm.js",
@@ -18,9 +18,10 @@
         "build": "./scripts/build.sh",
         "depcheck": "depcheck .",
         "format": "prettier \"{,!(node_modules|dist)/**/}*.{js,json,ts,tsx}\" --loglevel warn -w",
-        "publish:minor": "npm run verify && scripts/bump.js --minor && npm publish --dry-run",
-        "publish:patch": "npm run verify && scripts/bump.js --patch && npm publish --dry-run",
+        "publish:minor": "npm run test && scripts/bump.js --minor && git add . && git commit -m \"minor release commit\" && git push origin master && npm publish --dry-run",
+        "publish:patch": "npm run test && scripts/bump.js --patch && git add . && git commit -m \"patch release commit\" && git push origin master && npm publish --dry-run",
         "pretest": "npm run build",
+        "release": "",
         "verify": "npm run depcheck && npm run format && npm run test",
         "start": "npm i && npm run build && cd test/example && npm i",
         "test": "jest --coverage --runInBand"
