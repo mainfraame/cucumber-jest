@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 
+import interopRequireDefault from '@babel/runtime-corejs3/helpers/interopRequireDefault';
 import escapeStringRegexp from 'escape-string-regexp';
 import {flattenObject} from 'flatten-anything';
 import {filter, reduce} from 'inline-loops.macro';
-import {interopRequireDefault} from 'jest-util';
 import mergeDeep from 'merge-deep';
 import mkdirp from 'mkdirp';
 

@@ -1,6 +1,8 @@
-node_modules
+coverage
 dist
+node_modules
 *.tgz
+.iml
 .idea
 package-lock.json
 example/package-lock.json

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2021-04-18
+
+### Added
+
+-   added developer tooling
+-   added tests; thanks to the addition from [kevincmanning](https://github.com/mainfraame/cucumber-jest/issues?q=is%3Apr+author%3Akevincmanning)
+
+### Changes
+
+-   moved example project inside of test folder
+-   modified jest config for project to run tests against example project
+-   fixed cucumber expression [71ae22b](https://github.com/mainfraame/cucumber-jest/commit/71ae22b53924e0bccd11a14d503dbc342e6fb40f)
+
 ## [0.2.4] - 2021-03-01
 
 ### Added

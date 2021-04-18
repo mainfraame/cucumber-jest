@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {act} from 'react-dom/test-utils';
 
-import {SignUp} from '../src/signUp';
+import {SignUp} from './example/src/signUp';
 import {TestWorld} from './world';
 
 const $root = document.createElement('div');

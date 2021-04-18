@@ -2,16 +2,6 @@
     "name": "cucumber-jest-example",
     "version": "0.0.1",
     "description": "a basic example of using cucumber-jest",
-    "scripts": {
-        "test": "ENV=dev jest --verbose --logHeapUsage",
-        "test2": "ENV=dev jest --verbose --logHeapUsage --runTestsByPath test/features/scenarioOutlineNested.feature",
-        "test:tags:single": "ENV=dev TAGS=withExtraEmails jest --verbose --logHeapUsage",
-        "test:tags:multiple": "ENV=dev TAGS=withExtraEmails,withoutExtraEmails jest --verbose --logHeapUsage",
-        "test:tags:not:single": "ENV=dev TAGS=\"not withExtraEmails\" jest --verbose --logHeapUsage",
-        "test:tags:not:multiple": "ENV=dev TAGS=\"not withExtraEmails, not withoutExtraEmails\" jest --verbose --logHeapUsage",
-        "test:tags:debug": "ENV=dev jest scenarioTagsDebug.feature --verbose --logHeapUsage",
-        "test:tags:skip": "ENV=dev jest scenarioTagsSkip.feature --verbose --logHeapUsage"
-    },
     "author": "dayne mentier",
     "license": "MIT",
     "bugs": {
@@ -25,29 +15,16 @@
         "@material-ui/icons": "4.11.2",
         "@material-ui/lab": "^4.0.0-alpha.57",
         "axios": "^0.21.1",
-        "jest": "26.6.3",
         "react": "^17.0.1",
         "react-dom": "^17.0.1"
     },
     "devDependencies": {
-        "@babel/core": "^7.12.9",
-        "@babel/plugin-proposal-class-properties": "^7.12.13",
-        "@babel/plugin-transform-typescript": "^7.12.1",
-        "@babel/preset-env": "^7.12.7",
-        "@babel/preset-react": "^7.12.7",
-        "@babel/preset-typescript": "^7.12.7",
-        "@types/jest": "^25.2.1",
-        "@types/qs": "^6.9.5",
         "@types/react": "^16.9.32",
         "@types/react-dom": "^16.9.6",
-        "babel-plugin-lodash": "^3.3.4",
-        "cucumber-jest": "0.2.4",
         "deep-clean": "^1.0.2",
         "jest-date-mock": "^1.0.8",
         "msw": "^0.24.1",
-        "qs": "^6.9.4",
-        "typescript": "^4.1.2",
-        "weak-napi": "^2.0.2"
+        "typescript": "^4.1.2"
     },
     "jest": {
         "collectCoverageFrom": [

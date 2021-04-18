@@ -100,11 +100,11 @@ You'll need to add the following to your jest config:
 
 ## Example
 
-The code-snippets below are taken from the [example project](example)
+The code-snippets below are taken from the [example project](test/example)
 
 ## World
 
-[setWorldConstructor](example/test/world.ts) allows you to set the context of "this" for your steps/hooks definitions.
+[setWorldConstructor](test/world.ts) allows you to set the context of "this" for your steps/hooks definitions.
 
 This can be helpful when you want to maintain state, access _globals_, or assign component testing classes. The values
 are accessible within all Hooks and Steps.
@@ -653,10 +653,10 @@ Feature: Sign Up - Scenario Outline [Nested]
 
 | Type                             | Feature File                                                                                   | Variable File                                                                                 |
 | -------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Global Variables **Without** Env | [scenarioOutlineNestedGlobal](example/test/features/scenarioOutlineNestedGlobal.feature)       | [global.vars.ts](example/test/variables/global.vars.ts)                                       |
-| Variables **Without** Env        | [scenarioOutline](example/test/features/scenarioOutline.feature)                               | [scenarioOutline.vars.ts](example/test/variables/scenarioOutline.vars.ts)                     |
-| Global Variables **With** Env    | [scenarioOutlineNestedGlobalEnv](example/test/features/scenarioOutlineNestedGlobalEnv.feature) | [global.vars.dev.ts](example/test/variables/global.vars.dev.ts)                               |
-| Variables **With** (dev)         | [scenarioOutlineNested](example/test/features/scenarioOutlineNested.feature)                   | [scenarioOutlineNested.vars.dev.ts](example/test/variables/scenarioOutlineNested.vars.dev.ts) |
+| Global Variables **Without** Env | [scenarioOutlineNestedGlobal](test/features/scenarioOutlineNestedGlobal.feature)       | [global.vars.ts](test/variables/global.vars.ts)                                       |
+| Variables **Without** Env        | [scenarioOutline](test/features/scenarioOutline.feature)                               | [scenarioOutline.vars.ts](test/variables/scenarioOutline.vars.ts)                     |
+| Global Variables **With** Env    | [scenarioOutlineNestedGlobalEnv](test/features/scenarioOutlineNestedGlobalEnv.feature) | [global.vars.dev.ts](test/variables/global.vars.dev.ts)                               |
+| Variables **With** (dev)         | [scenarioOutlineNested](test/features/scenarioOutlineNested.feature)                   | [scenarioOutlineNested.vars.dev.ts](test/variables/scenarioOutlineNested.vars.dev.ts) |
 
 ### Variable File Rules
 

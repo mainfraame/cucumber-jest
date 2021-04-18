@@ -1,0 +1,12 @@
+ignores: [
+    "eslint",
+    "babel-*",
+    "import-sort-style-module",
+    "@babel/*",
+    "@jest/types",
+    "@types/*",
+    "ts-node",
+    "typescript",
+    "prettier-plugin-import-sort"
+]
+ignoreDirs: ["coverage","node_modules","test"]

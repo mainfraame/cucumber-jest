@@ -5,16 +5,14 @@ import {setupServer} from 'msw/node';
 export const $spy = jest.fn();
 
 const callSpy = (req) => {
-    $spy(
-        deepClean({
-            url: req.url.pathname,
-            method: req.method,
-            ...(Object.keys(req.body || {}).length ? {data: req.body} : {}),
-            ...(Object.keys(req.params || {}).length
-                ? {params: req.params}
-                : {})
-        })
-    );
+    const call = deepClean({
+        url: req.url.pathname,
+        method: req.method,
+        ...(Object.keys(req.body || {}).length ? {data: req.body} : {}),
+        ...(Object.keys(req.params || {}).length ? {params: req.params} : {})
+    });
+
+    $spy(call);
 };
 
 export const $server = setupServer(
