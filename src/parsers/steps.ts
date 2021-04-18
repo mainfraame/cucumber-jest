@@ -50,9 +50,9 @@ export function parseSteps(steps, definitions) {
             }
 
             const stepArgs = [
-                ...Array.from(
-                    definition.expression?.regexp?.exec(step.text) || []
-                ).slice(1),
+                ...definition.expression
+                    ?.match(step.text)
+                    ?.map((arg) => arg.getValue()),
                 ...(step.dataTable ? [new DataTable(step.dataTable)] : []),
                 ...(step.docString
                     ? [
