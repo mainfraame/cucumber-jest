@@ -6,11 +6,11 @@ import {parseSuite} from './parsers/suite';
 
 const options = supportCodeLibraryBuilder.finalize();
 
-let hasReact = false;
+let hasReactDom = false;
 
 /** check if react exists */
 try {
-    hasReact = !!require('react');
+    hasReactDom = !!require('react-dom');
 } catch (e) {
     //
 }
@@ -21,7 +21,7 @@ export function exec(
     moduleFileExtensions: string[]
 ) {
     const act =
-        typeof global['window'] === 'undefined' || !hasReact
+        typeof global['window'] === 'undefined' || !hasReactDom
             ? async (fn) => await fn()
             : require('react-dom/test-utils').act;
 

@@ -16,8 +16,8 @@
     "scripts": {
         "build": "./scripts/build.sh",
         "format": "prettier \"{,!(node_modules|dist)/**/}*.{js,json,ts,tsx}\" --loglevel warn -w",
-        "publish:minor": "npm run test && depcheck . --ignores=react && scripts/bump.js --minor && jest-badge-generator && git add . && git commit -m \"minor release commit\" && git push origin master && npm publish",
-        "publish:patch": "npm run test && depcheck . --ignores=react && scripts/bump.js --patch && jest-badge-generator && git add . && git commit -m \"patch release commit\" && git push origin master && npm publish",
+        "publish:minor": "npm run test && depcheck . && scripts/bump.js --minor && jest-badge-generator && git add . && git commit -m \"minor release commit\" && git push origin master && npm publish",
+        "publish:patch": "npm run test && depcheck . && scripts/bump.js --patch && jest-badge-generator && git add . && git commit -m \"patch release commit\" && git push origin master && npm publish",
         "pretest": "npm run build",
         "start": "npm i && npm run build && cd test/example && npm i",
         "test": "jest --coverage --runInBand"
@@ -53,8 +53,7 @@
         "jest": ">=26.0.1",
         "merge-deep": "^3.0.3",
         "mkdirp": "^1.0.4",
-        "outdent": "^0.8.0",
-        "react-dom": ">=16.9.0"
+        "outdent": "^0.8.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.13.14",
@@ -82,6 +81,9 @@
         "semver": "^7.3.5",
         "ts-node": "^9.1.1",
         "typescript": "^4.2.4"
+    },
+    "optionalDependencies": {
+        "react-dom": ">=16.9.0"
     },
     "husky": {
         "hooks": {
