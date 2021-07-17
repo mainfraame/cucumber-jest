@@ -108,7 +108,7 @@ export function parseSuite(
             const skip =
                 shouldSkipForDebug ||
                 tags.includes('@skip') ||
-                (hasTags && !!tags.length && !tags.some(matchesTags));
+                (hasTags && !tags.length && !tags.some(matchesTags));
 
             return [
                 ...acc,
